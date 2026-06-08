@@ -2,14 +2,14 @@ import pandas as pd
 from sqlalchemy import create_engine
 
 # CSV file
-file_path = "/home/anu/Downloads/Sales_Dashboard/sales_dashboard/customers.csv"
+file_path = "/home/anu/Downloads/Sales_Dashboard/sales_dashboard/Region Wise Customers - Overall Sheet.csv"
 
 # Read CSV
 df = pd.read_csv(file_path)
 
 # PostgreSQL connection
 engine = create_engine(
-    "postgresql://postgres:admin123@localhost:5432/PPC_Data"
+    "postgresql://postgres:postgres@localhost:5432/PPC_Data"
 )
 
 # Import to PostgreSQL
@@ -60,7 +60,7 @@ print("✅ CSV imported successfully")
 
 # # PostgreSQL connection
 # engine = create_engine(
-#     "postgresql://postgres:admin123@localhost:5432/Sales_Data"
+#     "postgresql://postgres:postgres@localhost:5432/Sales_Data"
 # )
 
 # # Insert into DB

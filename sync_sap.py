@@ -28,7 +28,7 @@ plants = ["3200", "3300", "3700", "3800"]
 
 
 engine = create_engine(
-    "postgresql://postgres:admin123@localhost:5432/Sales_Data"
+    "postgresql://postgres:postgres@localhost:5432/Sales_Data"
 )
 
 
@@ -96,7 +96,7 @@ end_date = today
 # start_date = today 
 # end_date = today
 
-# start_date = datetime(2026, 5, 17).date()
+# start_date = datetime(2026, 5, 23).date()
 # end_date = datetime.now().date()
 
 

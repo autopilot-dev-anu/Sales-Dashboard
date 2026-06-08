@@ -20,7 +20,7 @@ print(f"Rows Loaded: {len(df)}")
 # -----------------------------
 
 engine = create_engine(
-    "postgresql://postgres:admin123@localhost:5432/Sales_Data"
+    "postgresql://postgres:postgres@localhost:5432/Sales_Data"
 )
 
 # -----------------------------

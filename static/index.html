@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SalesVision — Enterprise Dashboard v6</title>
+<title>SalesVision — Enterprise Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#f1f5f9;--surface:#fff;--card:#fff;--card2:#f8fafc;
   --border:#e2e8f0;--border2:#cbd5e1;
   --accent:#2563eb;--accent2:#7c3aed;--accent3:#059669;--accent4:#d97706;
-  --danger:#dc2626;--pink:#db2777;--teal:#0891b2;--orange:#ea580c;
+  --danger:#dc2626;--teal:#0891b2;--orange:#ea580c;
   --text:#0f172a;--text2:#334155;--muted:#64748b;--muted2:#94a3b8;
   --sidebar-w:256px;--sidebar-collapsed:60px;--topbar-h:60px;
-  --shadow:0 1px 3px rgba(15,23,42,.07),0 1px 2px rgba(15,23,42,.04);
-  --shadow-md:0 4px 14px rgba(15,23,42,.09),0 2px 6px rgba(15,23,42,.04);
+  --shadow:0 1px 3px rgba(15,23,42,.07);
+  --shadow-md:0 4px 14px rgba(15,23,42,.09);
 }
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;margin:0;padding:0}
@@ -25,60 +25,46 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;fon
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
-
-/* SIDEBAR */
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200;box-shadow:2px 0 18px rgba(15,23,42,.06);transition:width .25s cubic-bezier(.4,0,.2,1);overflow:hidden}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200;box-shadow:2px 0 18px rgba(15,23,42,.06);transition:width .25s;overflow:hidden}
 #sidebar.collapsed{width:var(--sidebar-collapsed)}
 #sidebar.collapsed .logo-text,#sidebar.collapsed .logo-sub,#sidebar.collapsed .nav-label-text,#sidebar.collapsed .nav-section-label,#sidebar.collapsed #data-info{opacity:0;width:0;overflow:hidden;pointer-events:none}
 #sidebar.collapsed .sidebar-logo{justify-content:center;padding:14px 0}
 #sidebar.collapsed .nav-item{justify-content:center;padding:10px 0;margin:2px 6px;border-radius:8px;gap:0}
-#sidebar.collapsed .nav-item.active{border-radius:0 8px 8px 0;margin-left:0;padding-left:0}
-#sidebar.collapsed .nav-item i{font-size:19px;width:auto}
-.sidebar-toggle{position:fixed;top:16px;left:calc(var(--sidebar-w) - 14px);z-index:300;width:28px;height:28px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:left .25s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-md);color:var(--muted);padding:0}
+#sidebar.collapsed .nav-item.active{border-radius:0 8px 8px 0;margin-left:0}
+.sidebar-toggle{position:fixed;top:16px;left:calc(var(--sidebar-w) - 14px);z-index:300;width:28px;height:28px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:left .25s;box-shadow:var(--shadow-md);color:var(--muted);padding:0}
 .sidebar-toggle:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 .sidebar-toggle i{font-size:11px;transition:transform .25s}
 body.sidebar-collapsed .sidebar-toggle{left:calc(var(--sidebar-collapsed) - 14px)}
 body.sidebar-collapsed .sidebar-toggle i{transform:rotate(180deg)}
 .sidebar-logo{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.logo-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 3px 10px rgba(37,99,235,.35)}
-.logo-text{font-weight:800;font-size:16px;letter-spacing:-.03em;color:var(--text)}
+.logo-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-text{font-weight:800;font-size:16px;color:var(--text)}
 .logo-sub{font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;font-weight:600}
 .nav-section-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted2);padding:16px 20px 5px;font-weight:700}
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 18px;cursor:pointer;color:var(--muted);border-radius:8px;margin:1px 10px;font-size:13px;font-weight:500;transition:all .15s;text-decoration:none}
 .nav-item:hover{background:var(--bg);color:var(--text2)}
 .nav-item.active{background:#eff6ff;color:var(--accent);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding-left:15px;font-weight:700;margin-left:0}
 .nav-item i{font-size:15px;width:20px;text-align:center}
-
-/* TOPBAR */
-#topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px 0 28px;z-index:100;gap:12px;box-shadow:0 1px 6px rgba(15,23,42,.05);transition:left .25s cubic-bezier(.4,0,.2,1)}
+#topbar{position:fixed;top:0;left:var(--sidebar-w);right:0;height:var(--topbar-h);background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px 0 28px;z-index:100;gap:12px;box-shadow:0 1px 6px rgba(15,23,42,.05);transition:left .25s}
 body.sidebar-collapsed #topbar{left:var(--sidebar-collapsed)}
-.topbar-title{font-weight:800;font-size:17px;letter-spacing:-.03em;color:var(--text)}
-.topbar-sub{font-size:11px;color:var(--muted)}
-
-/* FILTER BAR */
-#filterbar{position:fixed;top:var(--topbar-h);left:var(--sidebar-w);right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;z-index:99;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(15,23,42,.05);transition:left .25s cubic-bezier(.4,0,.2,1)}
+.topbar-title{font-weight:800;font-size:17px;color:var(--text)}
+#filterbar{position:fixed;top:var(--topbar-h);left:var(--sidebar-w);right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;z-index:99;display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap;transition:left .25s}
 body.sidebar-collapsed #filterbar{left:var(--sidebar-collapsed)}
 .filter-group{display:flex;flex-direction:column;gap:3px}
 .filter-label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
-.filter-control{background:var(--bg);border:1.5px solid var(--border2);color:var(--text);border-radius:8px;padding:6px 11px;font-size:13px;font-family:inherit;outline:none;transition:all .15s}
+.filter-control{background:var(--bg);border:1.5px solid var(--border2);color:var(--text);border-radius:8px;padding:6px 11px;font-size:13px;font-family:inherit;outline:none}
 .filter-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
 select.filter-control{min-width:130px;cursor:pointer}
-.btn-apply{background:var(--accent);border:none;color:#fff;padding:7px 18px;border-radius:8px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer;transition:all .15s;align-self:flex-end;box-shadow:0 2px 8px rgba(37,99,235,.3)}
-.btn-apply:hover{background:#1d4ed8;transform:translateY(-1px)}
-.btn-clear{background:var(--bg);border:1.5px solid var(--border2);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;align-self:flex-end;transition:all .15s}
-.btn-clear:hover{border-color:var(--danger);color:var(--danger);background:#fef2f2}
-.filter-badge{background:#eff6ff;border:1px solid #bfdbfe;color:var(--accent);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;align-self:flex-end;white-space:nowrap}
-
-/* MAIN */
-#main{margin-left:var(--sidebar-w);margin-top:var(--topbar-h);padding:22px 28px;min-height:100vh;transition:margin-left .25s cubic-bezier(.4,0,.2,1)}
+.btn-apply{background:var(--accent);border:none;color:#fff;padding:7px 18px;border-radius:8px;font-size:13px;font-family:inherit;font-weight:700;cursor:pointer;align-self:flex-end}
+.btn-apply:hover{background:#1d4ed8}
+.btn-clear{background:var(--bg);border:1.5px solid var(--border2);color:var(--muted);padding:7px 14px;border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;align-self:flex-end}
+.btn-clear:hover{border-color:var(--danger);color:var(--danger)}
+.filter-badge{background:#eff6ff;border:1px solid #bfdbfe;color:var(--accent);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;align-self:flex-end}
+#main{margin-left:var(--sidebar-w);margin-top:var(--topbar-h);padding:22px 28px;min-height:100vh;transition:margin-left .25s}
 body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
-
-/* CARDS */
 .dash-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
 .card-title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px;font-weight:700}
 .card-title::before{content:'';width:3px;height:14px;background:var(--accent);border-radius:2px}
-
-/* KPI CARDS */
 .kpi-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;transition:all .2s;box-shadow:var(--shadow)}
 .kpi-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
 .kpi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
@@ -107,12 +93,8 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
 .kpi-card.teal .kpi-value{color:var(--teal)}
 .kpi-card.orange .kpi-value{color:var(--orange)}
 .kpi-sub{font-size:11px;color:var(--muted2);margin-top:4px}
-
-/* PROGRESS */
 .prog-bar{height:6px;border-radius:4px;background:var(--bg);overflow:hidden;border:1px solid var(--border)}
 .prog-fill{height:100%;border-radius:4px;transition:width .6s ease}
-
-/* TABLE */
 .dash-table{width:100%;border-collapse:collapse}
 .dash-table th{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;border-bottom:2px solid var(--border);font-weight:700;white-space:nowrap;background:var(--card2)}
 .dash-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -120,14 +102,9 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
 .dash-table tbody tr:hover td{background:#f0f9ff}
 .dash-table tbody tr:last-child td{border-bottom:none}
 .mono{font-family:'DM Mono',monospace;font-size:12px}
-
-/* PAGES */
 .page{display:none}.page.active{display:block}
-
-/* SEGMENT BUTTONS */
 .seg-btn{background:var(--bg);border:1.5px solid var(--border2);color:var(--muted);padding:5px 14px;border-radius:7px;font-size:12px;font-family:inherit;cursor:pointer;transition:all .15s;font-weight:600}
 .seg-btn.active-grp{background:var(--accent);border-color:var(--accent);color:#fff}
-
 .rank-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;font-size:11px;font-weight:800}
 #toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:11px 18px;font-size:13px;transform:translateY(80px);opacity:0;transition:all .25s;z-index:9999;box-shadow:var(--shadow-md)}
 #toast.show{transform:translateY(0);opacity:1}
@@ -136,14 +113,15 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
 .pbadge.p3700{background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd}
 .pbadge.p3300{background:#ecfdf5;color:#059669;border:1px solid #6ee7b7}
 .pbadge.p3800{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}
-.mt-badge{display:inline-flex;align-items:center;gap:4px;background:#fff7ed;border:1px solid #fed7aa;color:#ea580c;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace}
-.detail-header{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #bfdbfe;border-radius:14px;padding:20px 24px;margin-bottom:18px;box-shadow:var(--shadow)}
-
-/* ─── SALESPERSON CARDS ─── */
+.pbadge.rNorth{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
+.pbadge.rSouth{background:#fffbeb;color:#d97706;border:1px solid #fcd34d}
+.pbadge.rEast{background:#ecfdf5;color:#059669;border:1px solid #6ee7b7}
+.pbadge.rWest{background:#f5f3ff;color:#7c3aed;border:1px solid #c4b5fd}
+.mt-badge{display:inline-flex;align-items:center;background:#fff7ed;border:1px solid #fed7aa;color:#ea580c;border-radius:8px;padding:2px 8px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace}
 .sp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;margin-bottom:20px}
 .sp-card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);transition:all .2s;cursor:pointer}
 .sp-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--accent)}
-.sp-card.sp-selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15),var(--shadow-md)}
+.sp-card.sp-selected{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.15)}
 .sp-card-header{padding:16px 18px 12px;display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid var(--border)}
 .sp-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800;flex-shrink:0;color:#fff}
 .sp-name{font-weight:800;font-size:15px;color:var(--text)}
@@ -157,20 +135,16 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
 .sp-tva-track{height:10px;border-radius:6px;background:var(--bg);overflow:hidden;border:1px solid var(--border)}
 .sp-tva-fill{height:100%;border-radius:6px;transition:width .7s ease}
 .pct-hit{color:#059669;font-weight:800}.pct-close{color:#d97706;font-weight:800}.pct-miss{color:#dc2626;font-weight:800}
-
-/* DETAIL PANEL */
 #sp-detail-panel{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:20px;box-shadow:var(--shadow-md)}
 .sp-detail-header{background:linear-gradient(135deg,#eff6ff,#f5f3ff);padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
 .sp-detail-avatar{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;flex-shrink:0}
-.sp-detail-name{font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.sp-detail-name{font-size:20px;font-weight:800;color:var(--text)}
 .sp-detail-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .sp-detail-body{padding:22px 24px}
 .sp-kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:18px}
 .sp-mini-kpi{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
 .sp-mini-kpi-label{font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
 .sp-mini-kpi-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:800}
-
-/* WEEK TABLE */
 .wk-table{width:100%;border-collapse:collapse;font-size:12px}
 .wk-table th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:2px solid var(--border);font-weight:700;background:var(--bg);white-space:nowrap}
 .wk-table td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -178,59 +152,45 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
 .wk-table tbody tr:last-child td{border-bottom:none}
 .mini-bar{height:5px;border-radius:3px;background:var(--bg);border:1px solid var(--border);overflow:hidden;width:60px;display:inline-block;vertical-align:middle}
 .mini-bar-fill{height:100%;border-radius:3px}
-
-/* HEAD SUMMARY */
 .head-summary{background:linear-gradient(135deg,#eff6ff,#ecfdf5);border:1.5px solid #bfdbfe;border-radius:14px;padding:20px 24px;margin-bottom:18px}
 .head-stat{padding:0 20px;border-left:1px solid #bfdbfe}
 .head-stat:first-child{padding-left:0;border-left:none}
 .head-stat-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
 .head-big{font-family:'DM Mono',monospace;font-weight:800;letter-spacing:-.03em}
 .target-config{background:linear-gradient(135deg,#f8faff,#fdf4ff);border:1.5px solid #c7d2fe;border-radius:14px;padding:16px 20px;margin-bottom:18px}
-
-/* ─── INDIVIDUAL PLAN TABLE ─── */
 .plan-table{width:100%;border-collapse:collapse;font-size:12px}
 .plan-table th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:9px 12px;border-bottom:2px solid var(--border);font-weight:700;background:var(--card2);white-space:nowrap}
 .plan-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
 .plan-table tbody tr:last-child td{border-bottom:none}
 .plan-input{width:110px;background:var(--bg);border:1.5px solid var(--border2);color:var(--text);border-radius:7px;padding:5px 8px;font-size:12px;font-family:'DM Mono',monospace;text-align:right;outline:none}
-.plan-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.1)}
-
-/* ─── CUSTOMER MODULE ─── */
-.cust-search-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
-.cust-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:0;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
+.plan-input:focus{border-color:var(--accent)}
+.cust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px}
+.cust-card{background:var(--card);border:1.5px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow)}
 .cust-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent)}
 .cust-card-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
-.cust-avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
-.cust-name{font-weight:700;font-size:13px;color:var(--text);line-height:1.3}
+.cust-avatar{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.cust-name{font-weight:700;font-size:13px;color:var(--text)}
 .cust-meta{font-size:10px;color:var(--muted);margin-top:2px}
 .cust-stats{padding:10px 16px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .cust-stat{background:var(--bg);border-radius:7px;padding:7px 10px}
 .cust-stat-lbl{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
 .cust-stat-val{font-family:'DM Mono',monospace;font-size:12px;font-weight:800;color:var(--text2)}
-.cust-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:20px}
-
-/* CUSTOMER DETAIL */
 #cust-detail-panel{background:var(--card);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;margin-top:4px;box-shadow:var(--shadow-md)}
 .cust-detail-header{background:linear-gradient(135deg,#eff6ff,#f0fdf4);padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
 .cust-detail-avatar{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:22px;color:#fff;font-weight:800;flex-shrink:0}
-
-/* YEARLY COLOURS */
 .yr-2022{color:#2563eb}.yr-2023{color:#7c3aed}.yr-2024{color:#059669}.yr-2025{color:#d97706}.yr-2026{color:#db2777}
 </style>
 </head>
 <body>
-
 <button class="sidebar-toggle" id="sidebar-toggle" onclick="toggleSidebar()"><i class="bi bi-chevron-left"></i></button>
-
 <nav id="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon">📈</div>
-    <div><div class="logo-text">SalesVision</div><div class="logo-sub">Enterprise v6</div></div>
+    <div><div class="logo-text">SalesVision</div><div class="logo-sub">Enterprise</div></div>
   </div>
   <div class="nav-section-label">Main</div>
   <a class="nav-item active" onclick="showPage('overview')" data-page="overview"><i class="bi bi-grid-1x2-fill"></i><span class="nav-label-text"> Overview</span></a>
   <a class="nav-item" onclick="showPage('customers')" data-page="customers"><i class="bi bi-people-fill"></i><span class="nav-label-text"> Customers</span></a>
-  <a class="nav-item" onclick="showPage('trends')" data-page="trends"><i class="bi bi-graph-up-arrow"></i><span class="nav-label-text"> Trends</span></a>
   <a class="nav-item" onclick="showPage('collections')" data-page="collections"><i class="bi bi-wallet2"></i><span class="nav-label-text"> Collections</span></a>
   <div class="nav-section-label">Performance</div>
   <a class="nav-item" onclick="showPage('plants')" data-page="plants"><i class="bi bi-building-fill"></i><span class="nav-label-text"> Plants</span></a>
@@ -240,21 +200,43 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
     <div id="data-info">Loading…</div>
   </div>
 </nav>
-
 <div id="topbar">
-  <div><div class="topbar-title" id="page-title">Overview</div><div class="topbar-sub" id="page-sub">Last 7 days</div></div>
+  <div><div class="topbar-title" id="page-title">Overview</div></div>
   <div class="ms-auto d-flex align-items-center gap-2"><span class="filter-badge" id="record-badge">— records</span></div>
 </div>
-
+<!-- <div id="topbar">
+  <div><div class="topbar-title" id="page-title">Overview</div></div>
+  <div class="ms-auto d-flex align-items-center gap-2">
+    <span class="filter-badge" id="record-badge">— records</span>
+    <button id="sync-btn" onclick="syncSAP()" style="display:flex;align-items:center;gap:6px;background:#059669;border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:12px;font-family:inherit;font-weight:700;cursor:pointer;transition:all .2s">
+      <i class="bi bi-arrow-repeat" id="sync-icon"></i>
+      <span id="sync-label">Sync SAP</span>
+    </button>
+    <span id="sync-info" style="font-size:10px;color:var(--muted)"></span>
+  </div>
+</div> -->
 <div id="filterbar">
   <div class="filter-group"><div class="filter-label">Customer</div>
-    <select class="filter-control" id="sel-customer" style="min-width:200px"><option value="">All Customers</option></select></div>
+    <select class="filter-control" id="sel-customer" style="min-width:180px"><option value="">All Customers</option></select></div>
+  <div class="filter-group"><div class="filter-label">Region</div>
+    <select class="filter-control" id="sel-region">
+      <option value="">All Regions</option>
+      <option>North</option><option>South</option><option>East</option><option>West</option>
+    </select></div>
   <div class="filter-group"><div class="filter-label">Plant</div>
-    <select class="filter-control" id="sel-plant" style="min-width:140px"><option value="">All Plants</option></select></div>
+    <select class="filter-control" id="sel-plant"><option value="">All Plants</option></select></div>
   <div class="filter-group"><div class="filter-label">Year</div>
-    <select class="filter-control" id="sel-year" style="min-width:95px"><option value="">All Years</option></select></div>
+    <select class="filter-control" id="sel-year"><option value="">All Years</option></select></div>
   <div class="filter-group"><div class="filter-label">Week</div>
-    <select class="filter-control" id="sel-week" style="min-width:105px"><option value="">All Weeks</option></select></div>
+    <select class="filter-control" id="sel-week"><option value="">All Weeks</option></select></div>
+  <div class="filter-group"><div class="filter-label">Material</div>
+    <select class="filter-control" id="sel-material">
+    <option value="">All Materials</option>
+    <option value="FG-PREFORMS">FG-PREFORMS</option>
+    <option value="FG-IML">FG-IML</option>
+    <option value="FG-HANDLE">FG-HANDLE</option>
+    <option value="FG-CAPS">FG-CAPS</option>
+    </select></div>
   <div class="filter-group"><div class="filter-label">From Date</div>
     <input type="date" class="filter-control" id="inp-from"/></div>
   <div class="filter-group"><div class="filter-label">To Date</div>
@@ -263,937 +245,414 @@ body.sidebar-collapsed #main{margin-left:var(--sidebar-collapsed)}
   <button class="btn-clear" onclick="clearFilters()"><i class="bi bi-x-lg me-1"></i>Clear</button>
   <div class="filter-badge ms-auto" id="date-range-label">Last 7 days</div>
 </div>
-
 <div id="main">
 
-  <!-- ══════════ OVERVIEW ══════════ -->
-  <div class="page active" id="page-overview">
-    <div class="row g-3 mb-4">
-      <div class="col-xl col-md-4 col-6"><div class="kpi-card blue"><div class="kpi-icon">💰</div><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="kpi-revenue">—</div><div class="kpi-sub">Invoice value incl. GST</div></div></div>
-      <!-- <div class="col-xl col-md-4 col-6"><div class="kpi-card purple"><div class="kpi-icon">🏷️</div><div class="kpi-label">Basic Price</div><div class="kpi-value" id="kpi-basic">—</div><div class="kpi-sub">Before GST</div></div></div> -->
-      <div class="col-xl col-md-4 col-6"><div class="kpi-card green"><div class="kpi-icon">📦</div><div class="kpi-label">Total Qty</div><div class="kpi-value" id="kpi-qty">—</div><div class="kpi-sub">Pieces dispatched</div></div></div>
-      <div class="col-xl col-md-4 col-6"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">Metric Tons</div><div class="kpi-value" id="kpi-mt">—</div><div class="kpi-sub">MT produced &amp; sold</div></div></div>
-      <div class="col-xl col-md-4 col-6"><div class="kpi-card amber"><div class="kpi-icon">🏢</div><div class="kpi-label">Customers</div><div class="kpi-value" id="kpi-customers">—</div><div class="kpi-sub">Unique buyers</div></div></div>
-      <div class="col-xl col-md-4 col-6"><div class="kpi-card red"><div class="kpi-icon">📋</div><div class="kpi-label">Transactions</div><div class="kpi-value" id="kpi-transactions">—</div><div class="kpi-sub">Invoice lines</div></div></div>
-    </div>
-    <div class="row g-3 mb-3">
-      <div class="col-xl-8"><div class="dash-card h-100">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="card-title mb-0">Revenue &amp; MT Tons Over Time</div>
-          <div class="d-flex gap-2">
-            <button class="seg-btn active-grp" id="grp-month" onclick="setGroup('month')">Month</button>
-            <button class="seg-btn" id="grp-week" onclick="setGroup('week')">Week</button>
-            <button class="seg-btn" id="grp-day" onclick="setGroup('day')">Day</button>
-          </div>
+<!-- OVERVIEW -->
+<div class="page active" id="page-overview">
+  <div class="row g-3 mb-4">
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card green"><div class="kpi-icon">🏷️</div><div class="kpi-label">Basic Price (Before GST)</div><div class="kpi-value" id="kpi-basic">—</div><div class="kpi-sub" id="kpi-basic-sub">Before tax</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card blue"><div class="kpi-icon">💰</div><div class="kpi-label">Total Revenue (After GST)</div><div class="kpi-value" id="kpi-revenue">—</div><div class="kpi-sub" id="kpi-gst-sub">Incl. all taxes</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">Metric Tons</div><div class="kpi-value" id="kpi-mt">—</div><div class="kpi-sub" id="kpi-qty-sub">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card amber"><div class="kpi-icon">🏢</div><div class="kpi-label">Customers</div><div class="kpi-value" id="kpi-customers">—</div><div class="kpi-sub">Unique buyers</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card red"><div class="kpi-icon">⏳</div><div class="kpi-label">Outstanding</div><div class="kpi-value" id="kpi-outstanding">—</div><div class="kpi-sub">Unpaid invoices</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card teal"><div class="kpi-icon">🚨</div><div class="kpi-label">Overdue</div><div class="kpi-value" id="kpi-overdue">—</div><div class="kpi-sub">Past payment terms</div></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-xl-8"><div class="dash-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="card-title mb-0">Revenue &amp; MT Tons Over Time</div>
+        <div class="d-flex gap-2">
+          <button class="seg-btn active-grp" id="grp-month" onclick="setGroup('month')">Month</button>
+          <button class="seg-btn" id="grp-week" onclick="setGroup('week')">Week</button>
+          <button class="seg-btn" id="grp-day" onclick="setGroup('day')">Day</button>
         </div>
-        <div class="chart-wrap"><canvas id="chart-revenue-trend" height="220"></canvas></div>
-      </div></div>
-      <div class="col-xl-4"><div class="dash-card h-100"><div class="card-title">Category Breakdown</div><div class="chart-wrap"><canvas id="chart-category-pie" height="220"></canvas></div></div></div>
+      </div>
+      <canvas id="chart-revenue-trend" height="220"></canvas>
+    </div></div>
+    <div class="col-xl-4"><div class="dash-card h-100"><div class="card-title">Category Breakdown</div><canvas id="chart-category-pie" height="220"></canvas></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-xl-6"><div class="dash-card"><div class="card-title">Top 10 Customers by Revenue</div><canvas id="chart-top-cust-bar" height="260"></canvas></div></div>
+    <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant Revenue Share</div><canvas id="chart-region-donut" height="260"></canvas></div></div>
+  </div>
+  <div class="dash-card">
+    <div class="card-title">Top 10 Customers — Detail</div>
+    <div class="table-responsive">
+      <table class="dash-table">
+        <thead><tr><th>#</th><th>Customer</th><th>Region</th><th>Sales Head</th><th class="text-end">Basic Price</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th><th class="text-end">Orders</th></tr></thead>
+        <tbody id="top5-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMERS -->
+<div class="page" id="page-customers">
+  <div id="cust-list-view">
+    <div class="dash-card mb-3 p-3">
+      <div class="d-flex gap-2 align-items-end flex-wrap">
+        <div class="filter-group"><div class="filter-label">Search</div>
+          <input type="search" class="filter-control" id="cust-search-inp" placeholder="Customer name…" style="min-width:240px" oninput="filterCustomerCards()"/></div>
+        <div class="filter-group"><div class="filter-label">Region</div>
+          <select class="filter-control" id="cust-region-filter" onchange="filterCustomerCards()">
+            <option value="">All</option><option>North</option><option>South</option><option>East</option><option>West</option>
+          </select></div>
+        <div class="filter-group"><div class="filter-label">Sort</div>
+          <select class="filter-control" id="cust-sort" onchange="filterCustomerCards()">
+            <option value="revenue">Revenue</option><option value="mt">MT Tons</option><option value="transactions">Orders</option>
+          </select></div>
+        <div class="filter-group"><div class="filter-label">Show</div>
+          <select class="filter-control" id="cust-limit" onchange="filterCustomerCards()">
+            <option value="20">Top 20</option><option value="50">Top 50</option><option value="100">Top 100</option><option value="0">All</option>
+          </select></div>
+        <div class="filter-badge ms-auto" id="cust-count-badge">—</div>
+      </div>
     </div>
     <div class="row g-3 mb-3">
-      <div class="col-xl-6"><div class="dash-card"><div class="card-title">Top 10 Customers by Revenue</div><div class="chart-wrap"><canvas id="chart-top-cust-bar" height="260"></canvas></div></div></div>
-      <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant Revenue Share</div><div class="chart-wrap"><canvas id="chart-region-donut" height="260"></canvas></div></div></div>
+      <div class="col-md-3"><div class="kpi-card blue"><div class="kpi-icon">🏢</div><div class="kpi-label">Customers</div><div class="kpi-value" id="c-kpi-total">—</div></div></div>
+      <div class="col-md-3"><div class="kpi-card green"><div class="kpi-icon">🏷️</div><div class="kpi-label">Basic Price</div><div class="kpi-value" id="c-kpi-basic">—</div></div></div>
+      <div class="col-md-3"><div class="kpi-card purple"><div class="kpi-icon">💰</div><div class="kpi-label">Revenue</div><div class="kpi-value" id="c-kpi-rev">—</div></div></div>
+      <div class="col-md-3"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">MT Tons</div><div class="kpi-value" id="c-kpi-mt">—</div></div></div>
     </div>
+    <div class="cust-grid" id="cust-cards-grid"></div>
     <div class="dash-card">
-      <div class="card-title">Top 10 Customers — Detail</div>
-      <div class="table-responsive">
+      <div class="card-title">All Customers — Ranked</div>
+      <div class="table-responsive" style="max-height:520px;overflow-y:auto">
         <table class="dash-table">
-          <thead><tr><th>#</th><th>Customer</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th><th class="text-end">Qty</th><th class="text-end">Orders</th></tr></thead>
-          <tbody id="top5-tbody"></tbody>
+          <thead style="position:sticky;top:0"><tr>
+            <th>#</th><th>Customer</th><th>Region</th><th>Sales Head</th>
+            <th class="text-end">Basic Price</th><th class="text-end">Revenue</th>
+            <th class="text-end">MT Tons</th><th class="text-end">Orders</th><th>Rev Share</th>
+          </tr></thead>
+          <tbody id="cust-table-tbody"></tbody>
         </table>
       </div>
     </div>
   </div>
-
-  <!-- ══════════ CUSTOMERS ══════════ -->
-  <div class="page" id="page-customers">
-
-    <!-- Customer List View -->
-    <div id="cust-list-view">
-      <div class="cust-search-bar">
-        <div class="filter-group">
-          <div class="filter-label">Search Customer</div>
-          <input type="search" class="filter-control" id="cust-search-inp" placeholder="Type customer name…" style="min-width:260px" oninput="filterCustomerCards()"/>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Region</div>
-          <select class="filter-control" id="cust-region-filter" onchange="filterCustomerCards()">
-            <option value="">All Regions</option>
-            <option>North</option><option>South</option><option>East</option><option>West</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Plant</div>
-          <select class="filter-control" id="cust-plant-filter" onchange="filterCustomerCards()">
-            <option value="">All Plants</option>
-            <option value="3200">Pondy (3200)</option>
-            <option value="3700">Silvassa (3700)</option>
-            <option value="3300">Roorkee (3300)</option>
-            <option value="3800">Howrah (3800)</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Sort By</div>
-          <select class="filter-control" id="cust-sort" onchange="filterCustomerCards()">
-            <option value="revenue">Revenue</option>
-            <option value="mt">MT Tons</option>
-            <option value="transactions">Orders</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <div class="filter-label">Show</div>
-          <select class="filter-control" id="cust-limit" onchange="filterCustomerCards()">
-            <option value="20">Top 20</option>
-            <option value="50">Top 50</option>
-            <option value="100">Top 100</option>
-            <option value="0">All</option>
-          </select>
-        </div>
-        <div class="filter-badge ms-auto" id="cust-count-badge">— customers</div>
+  <div id="cust-detail-panel" style="display:none">
+    <div class="cust-detail-header">
+      <div class="cust-detail-avatar" id="cd-avatar">?</div>
+      <div class="flex-grow-1">
+        <div style="font-size:20px;font-weight:800" id="cd-name">—</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:3px" id="cd-meta">—</div>
       </div>
-
-      <!-- Summary KPIs -->
+      <button class="btn-clear" onclick="closeCustDetail()"><i class="bi bi-x-lg me-1"></i>Close</button>
+    </div>
+    <div style="padding:22px 24px">
       <div class="row g-3 mb-4">
-        <div class="col-md-3"><div class="kpi-card blue"><div class="kpi-icon">🏢</div><div class="kpi-label">Total Customers</div><div class="kpi-value" id="c-kpi-total">—</div><div class="kpi-sub">Unique buyers</div></div></div>
-        <div class="col-md-3"><div class="kpi-card green"><div class="kpi-icon">💰</div><div class="kpi-label">Total Revenue</div><div class="kpi-value" id="c-kpi-rev">—</div><div class="kpi-sub">All customers</div></div></div>
-        <div class="col-md-3"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">Total MT Tons</div><div class="kpi-value" id="c-kpi-mt">—</div><div class="kpi-sub">All customers</div></div></div>
-        <div class="col-md-3"><div class="kpi-card amber"><div class="kpi-icon">📋</div><div class="kpi-label">Total Orders</div><div class="kpi-value" id="c-kpi-orders">—</div><div class="kpi-sub">Invoice lines</div></div></div>
+        <div class="col-md-3"><div class="kpi-card green"><div class="kpi-icon">🏷️</div><div class="kpi-label">Basic Price</div><div class="kpi-value" id="cd-basic">—</div></div></div>
+        <div class="col-md-3"><div class="kpi-card blue"><div class="kpi-icon">💰</div><div class="kpi-label">Revenue</div><div class="kpi-value" id="cd-revenue">—</div></div></div>
+        <div class="col-md-3"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">MT Tons</div><div class="kpi-value" id="cd-mt">—</div></div></div>
+        <div class="col-md-3"><div class="kpi-card red"><div class="kpi-icon">🚨</div><div class="kpi-label">Overdue</div><div class="kpi-value" id="cd-overdue">—</div></div></div>
       </div>
-
-      <!-- Cards grid -->
-      <div class="cust-grid" id="cust-cards-grid"></div>
-
-      <!-- Table view -->
+      <div class="row g-3 mb-3">
+        <div class="col-xl-8"><div class="dash-card"><div class="card-title">Monthly Revenue &amp; MT</div><canvas id="chart-cd-monthly" height="230"></canvas></div></div>
+        <div class="col-xl-4"><div class="dash-card"><div class="card-title">Category Split</div><canvas id="chart-cd-cat" height="230"></canvas></div></div>
+      </div>
       <div class="dash-card">
-        <div class="card-title">All Customers — Ranked</div>
-        <div class="table-responsive" style="max-height:520px;overflow-y:auto">
+        <div class="card-title">Month-by-Month</div>
+        <div class="table-responsive" style="max-height:340px;overflow-y:auto">
           <table class="dash-table">
-            <thead style="position:sticky;top:0"><tr>
-              <th>#</th><th>Customer</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th>
-              <th class="text-end">Qty</th><th class="text-end">Orders</th><th>Rev Share</th>
-            </tr></thead>
-            <tbody id="cust-table-tbody"></tbody>
+            <thead style="position:sticky;top:0"><tr><th>Month</th><th class="text-end">Basic Price</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th></tr></thead>
+            <tbody id="cd-monthly-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Customer Detail Drilldown -->
-    <div id="cust-detail-panel" style="display:none">
-      <div class="cust-detail-header">
-        <div class="cust-detail-avatar" id="cd-avatar">?</div>
-        <div class="flex-grow-1">
-          <div style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.02em" id="cd-name">—</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px" id="cd-meta">—</div>
-        </div>
-        <button class="btn-clear" onclick="closeCustDetail()"><i class="bi bi-x-lg me-1"></i>Close</button>
+<!-- COLLECTIONS -->
+<div class="page" id="page-collections">
+  <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+    <button class="seg-btn active-grp" id="col-tab-wtd" onclick="setColTab('wtd')"><i class="bi bi-calendar-week me-1"></i>WTD (Sun–Sat)</button>
+    <button class="seg-btn" id="col-tab-mtd" onclick="setColTab('mtd')"><i class="bi bi-calendar-month me-1"></i>MTD</button>
+    <button class="seg-btn" id="col-tab-ytd" onclick="setColTab('ytd')"><i class="bi bi-calendar3 me-1"></i>YTD</button>
+    <div class="ms-auto" style="font-size:11px;color:var(--muted)" id="col-period-label"></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card green"><div class="kpi-icon">🏷️</div><div class="kpi-label">Basic Price (Before GST)</div><div class="kpi-value" id="col-basic">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card blue"><div class="kpi-icon">💰</div><div class="kpi-label">Total Invoiced (After GST)</div><div class="kpi-value" id="col-total-inv">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card amber"><div class="kpi-icon">⏳</div><div class="kpi-label">Outstanding</div><div class="kpi-value" id="col-outstanding">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card red"><div class="kpi-icon">🚨</div><div class="kpi-label">Overdue</div><div class="kpi-value" id="col-overdue">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">MT Sold</div><div class="kpi-value" id="col-mt">—</div></div></div>
+    <div class="col-xl col-md-4 col-6"><div class="kpi-card teal"><div class="kpi-icon">📋</div><div class="kpi-label">Invoices</div><div class="kpi-value" id="col-invoices">—</div></div></div>
+  </div>
+  <!-- Business Plan vs Achievement -->
+  <div class="dash-card mb-3">
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+      <div class="card-title mb-0">Business Plan vs Achievement</div>
+      <div class="d-flex gap-2 align-items-center flex-wrap">
+        <span style="font-size:11px;color:var(--muted)">Plan MT:</span>
+        <input type="number" id="col-plan-mt" value="500" class="filter-control" style="width:90px;font-size:12px"/>
+        <span style="font-size:11px;color:var(--muted)">Plan Sales (₹ Cr):</span>
+        <input type="number" id="col-plan-sales" value="10" step="0.1" class="filter-control" style="width:90px;font-size:12px"/>
+        <button class="btn-apply" style="padding:6px 14px" onclick="loadCollections()"><i class="bi bi-arrow-clockwise me-1"></i>Recalc</button>
       </div>
-      <div style="padding:22px 24px">
-        <div class="row g-3 mb-4">
-          <div class="col-md-3"><div class="kpi-card blue"><div class="kpi-icon">💰</div><div class="kpi-label">Revenue</div><div class="kpi-value" id="cd-revenue">—</div></div></div>
-          <div class="col-md-3"><div class="kpi-card orange"><div class="kpi-icon">⚖️</div><div class="kpi-label">MT Tons</div><div class="kpi-value" id="cd-mt">—</div></div></div>
-          <div class="col-md-3"><div class="kpi-card green"><div class="kpi-icon">📦</div><div class="kpi-label">Qty</div><div class="kpi-value" id="cd-qty">—</div></div></div>
-          <div class="col-md-3"><div class="kpi-card amber"><div class="kpi-icon">📋</div><div class="kpi-label">Orders</div><div class="kpi-value" id="cd-txns">—</div></div></div>
-        </div>
-        <div class="row g-3 mb-3">
-          <div class="col-xl-8"><div class="dash-card"><div class="card-title">Monthly Revenue &amp; MT Tons</div><div class="chart-wrap"><canvas id="chart-cd-monthly" height="230"></canvas></div></div></div>
-          <div class="col-xl-4"><div class="dash-card"><div class="card-title">Category Split</div><div class="chart-wrap"><canvas id="chart-cd-cat" height="230"></canvas></div></div></div>
-        </div>
-        <div class="dash-card">
-          <div class="card-title">Month-by-Month Revenue &amp; MT</div>
-          <div class="table-responsive" style="max-height:340px;overflow-y:auto">
-            <table class="dash-table">
-              <thead style="position:sticky;top:0"><tr><th>Month</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th><th class="text-end">Qty</th></tr></thead>
-              <tbody id="cd-monthly-tbody"></tbody>
-            </table>
+    </div>
+    <div class="row g-3">
+      <div class="col-xl-6">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px">
+          <div style="font-size:12px;font-weight:700;margin-bottom:10px">MT Achievement</div>
+          <div class="d-flex align-items-end gap-3 mb-2">
+            <div><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Plan</div><div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--muted)" id="col-plan-mt-disp">—</div></div>
+            <div style="color:var(--muted2)">vs</div>
+            <div><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Actual</div><div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--orange)" id="col-act-mt-disp">—</div></div>
+            <div style="margin-left:auto"><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Gap</div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" id="col-mt-gap">—</div></div>
           </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" id="col-mt-bar" style="width:0%;background:linear-gradient(90deg,#ea580c,#fb923c)"></div></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px" id="col-mt-bar-label"></div>
+        </div>
+      </div>
+      <div class="col-xl-6">
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px">
+          <div style="font-size:12px;font-weight:700;margin-bottom:10px">Sales Achievement (Basic Price ₹ Cr)</div>
+          <div class="d-flex align-items-end gap-3 mb-2">
+            <div><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Plan (₹ Cr)</div><div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--muted)" id="col-plan-sales-disp">—</div></div>
+            <div style="color:var(--muted2)">vs</div>
+            <div><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Actual (₹ Cr)</div><div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--accent)" id="col-act-sales-disp">—</div></div>
+            <div style="margin-left:auto"><div style="font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase">Gap</div><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" id="col-sales-gap">—</div></div>
+          </div>
+          <div class="prog-bar" style="height:10px"><div class="prog-fill" id="col-sales-bar" style="width:0%;background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px" id="col-sales-bar-label"></div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- ══════════ TRENDS ══════════ -->
-  <div class="page" id="page-trends">
-    <div class="row g-3 mb-3">
-      <div class="col-xl-8"><div class="dash-card h-100"><div class="card-title">Revenue Trend</div><div class="chart-wrap"><canvas id="chart-trend-rev" height="260"></canvas></div></div></div>
-      <div class="col-xl-4"><div class="dash-card h-100"><div class="card-title">MT Tons Trend</div><div class="chart-wrap"><canvas id="chart-trend-mt" height="260"></canvas></div></div></div>
+  <!-- Aging -->
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="kpi-card red"><div class="kpi-icon">🔴</div><div class="kpi-label">Overdue &gt;180 days</div><div class="kpi-value" id="aging-180">—</div></div></div>
+    <div class="col-md-3"><div class="kpi-card red"><div class="kpi-icon">🟠</div><div class="kpi-label">Overdue &gt;90 days</div><div class="kpi-value" id="aging-90">—</div></div></div>
+    <div class="col-md-3"><div class="kpi-card amber"><div class="kpi-icon">🟡</div><div class="kpi-label">Overdue &gt;60 days</div><div class="kpi-value" id="aging-60">—</div></div></div>
+    <div class="col-md-3"><div class="kpi-card amber"><div class="kpi-icon">🟤</div><div class="kpi-label">Overdue &gt;30 days</div><div class="kpi-value" id="aging-30">—</div></div></div>
+  </div>
+  <div class="row g-3 mb-3">
+    <div class="col-xl-7"><div class="dash-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-2">
+        <div class="card-title mb-0">Collections Trend</div>
+        <div class="d-flex gap-1">
+          <button class="seg-btn" id="col-trend-day" onclick="setColTrend('day')">Day</button>
+          <button class="seg-btn active-grp" id="col-trend-week" onclick="setColTrend('week')">Week</button>
+          <button class="seg-btn" id="col-trend-month" onclick="setColTrend('month')">Month</button>
+        </div>
+      </div>
+      <div style="height:240px;position:relative"><canvas id="chart-col-trend"></canvas></div>
+    </div></div>
+    <div class="col-xl-5"><div class="dash-card h-100"><div class="card-title">Outstanding by Payment Terms</div><div style="height:240px;position:relative"><canvas id="chart-col-terms"></canvas></div></div></div>
+  </div>
+  <div class="dash-card">
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+      <div class="card-title mb-0">Outstanding &amp; Overdue by Customer</div>
+      <div class="d-flex gap-2">
+        <button class="seg-btn active-grp" id="col-view-all" onclick="setColView('all')">All</button>
+        <button class="seg-btn" id="col-view-overdue" onclick="setColView('overdue')">Overdue Only</button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="dash-table">
+        <thead><tr>
+          <th>#</th><th>Customer</th><th>Region</th><th>Sales Head</th><th>GST No</th>
+          <th class="text-end">Basic (₹ Cr)</th><th class="text-end">Invoiced (₹ Cr)</th>
+          <th class="text-end">Outstanding (₹ Cr)</th><th class="text-end">Overdue (₹ Cr)</th>
+          <th>Payment Terms</th><th class="text-end">MT</th><th class="text-end">Invoices</th>
+        </tr></thead>
+        <tbody id="col-cust-tbody"></tbody>
+      </table>
     </div>
   </div>
+</div>
 
-  <!-- ══════════ COLLECTIONS ══════════ -->
-  <div class="page" id="page-collections">
+<!-- PLANTS -->
+<div class="page" id="page-plants">
+  <div class="row g-3 mb-3" id="plant-cards-row"></div>
+  <div class="row g-3 mb-3">
+    <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant Revenue Comparison</div><canvas id="chart-plant-rev" height="260"></canvas></div></div>
+    <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant MT Tons</div><canvas id="chart-plant-mt" height="260"></canvas></div></div>
+  </div>
+</div>
 
-    <!-- Period Tabs -->
-    <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
-      <button class="seg-btn active-grp" id="col-tab-mtd" onclick="setColTab('mtd')"><i class="bi bi-calendar-month me-1"></i>MTD</button>
-      <button class="seg-btn" id="col-tab-wtd" onclick="setColTab('wtd')"><i class="bi bi-calendar-week me-1"></i>WTD</button>
-      <button class="seg-btn" id="col-tab-ytd" onclick="setColTab('ytd')"><i class="bi bi-calendar3 me-1"></i>YTD</button>
-      <div class="ms-auto" style="font-size:11px;color:var(--muted)" id="col-period-label">Loading…</div>
+<!-- SALES TEAM -->
+<div class="page" id="page-salesperson">
+  <div class="target-config mb-3">
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-sliders" style="color:var(--accent2);font-size:16px"></i>
+      <span style="font-size:13px;font-weight:800">Target Configuration</span>
+      <span style="font-size:11px;color:var(--muted)">(Per salesperson / month — based on Basic Price)</span>
     </div>
-
-    <!-- KPI Strip: Outstanding & Overdue -->
-    <div class="row g-3 mb-3">
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card blue">
-          <div class="kpi-icon">💰</div>
-          <div class="kpi-label">Total Invoiced</div>
-          <div class="kpi-value" id="col-total-inv">—</div>
-          <div class="kpi-sub">Invoice value (₹ Cr)</div>
-        </div>
-      </div>
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card amber">
-          <div class="kpi-icon">⏳</div>
-          <div class="kpi-label">Outstanding</div>
-          <div class="kpi-value" id="col-outstanding">—</div>
-          <div class="kpi-sub">Unpaid invoices (₹ Cr)</div>
-        </div>
-      </div>
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card red">
-          <div class="kpi-icon">🚨</div>
-          <div class="kpi-label">Overdue</div>
-          <div class="kpi-value" id="col-overdue">—</div>
-          <div class="kpi-sub">Past payment terms (₹ Cr)</div>
-        </div>
-      </div>
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card green">
-          <div class="kpi-icon">✅</div>
-          <div class="kpi-label">Collected</div>
-          <div class="kpi-value" id="col-collected">—</div>
-          <div class="kpi-sub">Est. received (₹ Cr)</div>
-        </div>
-      </div>
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card orange">
-          <div class="kpi-icon">⚖️</div>
-          <div class="kpi-label">MT Sold</div>
-          <div class="kpi-value" id="col-mt">—</div>
-          <div class="kpi-sub">Metric tons dispatched</div>
-        </div>
-      </div>
-      <div class="col-xl col-md-4 col-6">
-        <div class="kpi-card teal">
-          <div class="kpi-icon">📋</div>
-          <div class="kpi-label">Invoices</div>
-          <div class="kpi-value" id="col-invoices">—</div>
-          <div class="kpi-sub">Unique bill documents</div>
-        </div>
+    <div class="d-flex gap-3 align-items-end flex-wrap mb-3">
+      <div><div class="filter-label mb-1">Default Rev Target (₹ L/person/month)</div>
+        <input type="number" id="sp-target-input" value="50" min="0" class="filter-control" style="width:220px" oninput="syncDefaultTargets()"/></div>
+      <div><div class="filter-label mb-1">Default MT Target (per person/month)</div>
+        <input type="number" id="mt-target-input" value="1000" min="0" class="filter-control" style="width:220px" oninput="syncDefaultMTTargets()"/></div>
+      <button class="btn-apply" onclick="applyTargets()"><i class="bi bi-bullseye me-1"></i>Apply &amp; Recalculate</button>
+    </div>
+    <div class="dash-card p-0" style="border-radius:10px;overflow:hidden">
+      <div style="padding:10px 16px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase">Individual Monthly Plan</div>
+      <div class="table-responsive">
+        <table class="plan-table">
+          <thead><tr><th>#</th><th>Sales Head</th><th>Region</th><th class="text-end">Rev Target (₹ L)</th><th class="text-end">MT Target</th><th class="text-end">Actual Basic (₹)</th><th class="text-end">Actual MT</th><th class="text-end">Rev %</th><th class="text-end">MT %</th><th style="min-width:130px">Progress</th></tr></thead>
+          <tbody id="sp-plan-tbody"></tbody>
+        </table>
       </div>
     </div>
-
-    <!-- Business Plan vs Achievement -->
-    <div class="dash-card mb-3">
-      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-        <div class="card-title mb-0">Business Plan vs Achievement</div>
-        <div class="d-flex gap-2 align-items-center flex-wrap">
-          <div style="font-size:11px;color:var(--muted)">Plan MT Target:</div>
-          <input type="number" id="col-plan-mt" value="500" min="0" class="filter-control" style="width:110px;font-size:12px" placeholder="MT"/>
-          <div style="font-size:11px;color:var(--muted)">Plan Sales (₹ Cr):</div>
-          <input type="number" id="col-plan-sales" value="10" min="0" step="0.1" class="filter-control" style="width:110px;font-size:12px" placeholder="₹ Cr"/>
-          <button class="btn-apply" style="padding:6px 14px" onclick="loadCollections()"><i class="bi bi-arrow-clockwise me-1"></i>Recalc</button>
+  </div>
+  <div class="head-summary mb-3">
+    <div class="d-flex align-items-center flex-wrap gap-0">
+      <div class="head-stat"><div class="head-stat-label">Team Basic Price</div><div class="head-big" style="font-size:28px;color:var(--accent)" id="head-actual-val">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">Revenue (After GST)</div><div class="head-big" style="font-size:20px;color:var(--accent2)" id="head-revenue-val">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">Target</div><div class="head-big" style="font-size:20px;color:var(--muted)" id="head-target-val">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">Achievement %</div><div class="head-big" style="font-size:20px" id="head-pct">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">Total MT</div><div class="head-big" style="font-size:20px;color:var(--orange)" id="head-mt-val">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">MT Target</div><div class="head-big" style="font-size:20px;color:var(--muted)" id="head-mt-target">—</div></div>
+      <div class="head-stat"><div class="head-stat-label">MT %</div><div class="head-big" style="font-size:20px" id="head-mt-pct">—</div></div>
+    </div>
+    <div class="mt-3">
+      <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">Team Revenue Progress</div>
+      <div class="prog-bar" style="height:10px;border-radius:8px"><div class="prog-fill" id="head-prog-fill" style="width:0%;border-radius:8px"></div></div>
+    </div>
+  </div>
+  <div class="row g-3 mb-4">
+    <div class="col-xl-8"><div class="dash-card"><div class="card-title">Sales Head — Weekly Basic Price vs Target</div><canvas id="chart-head-weekly" height="180"></canvas></div></div>
+    <div class="col-xl-4"><div class="dash-card"><div class="card-title">Weekly MT Tons</div><canvas id="chart-head-mt-weekly" height="180"></canvas></div></div>
+  </div>
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div style="font-size:16px;font-weight:800"><i class="bi bi-person-badge-fill me-2" style="color:var(--accent)"></i>Salesperson Performance</div>
+    <div class="d-flex gap-2">
+      <button class="seg-btn active-grp" id="view-cards-btn" onclick="setSPView('cards')"><i class="bi bi-grid me-1"></i>Cards</button>
+      <button class="seg-btn" id="view-table-btn" onclick="setSPView('table')"><i class="bi bi-table me-1"></i>Table</button>
+    </div>
+  </div>
+  <div id="sp-cards-view"><div class="sp-grid" id="sp-cards-grid"></div></div>
+  <div id="sp-table-view" style="display:none">
+    <div class="dash-card mb-4">
+      <div class="card-title">All Salespersons — Target vs Actual</div>
+      <div class="table-responsive">
+        <table class="dash-table">
+          <thead><tr><th>#</th><th>Sales Head</th><th>Region</th><th class="text-end">Basic Price</th><th class="text-end">Revenue</th><th class="text-end">Rev Target</th><th class="text-end">Rev %</th><th class="text-end">MT Tons</th><th class="text-end">MT Target</th><th class="text-end">MT %</th><th class="text-end">Customers</th><th class="text-end">Orders</th></tr></thead>
+          <tbody id="sp-table-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div id="sp-detail-panel" style="display:none">
+    <div class="sp-detail-header">
+      <div class="sp-detail-avatar" id="sp-detail-avatar"></div>
+      <div class="flex-grow-1">
+        <div class="sp-detail-name" id="sp-detail-name"></div>
+        <div class="sp-detail-sub" id="sp-detail-sub"></div>
+      </div>
+      <button class="btn-clear" onclick="closeSPDetail()"><i class="bi bi-x-lg me-1"></i>Close</button>
+    </div>
+    <div class="sp-detail-body">
+      <div class="sp-kpi-grid mb-3">
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Basic Price</div><div class="sp-mini-kpi-val" id="spd-basic" style="color:var(--accent3)">—</div></div>
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Revenue</div><div class="sp-mini-kpi-val" id="spd-revenue" style="color:var(--accent)">—</div></div>
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Rev Target</div><div class="sp-mini-kpi-val" id="spd-target" style="color:var(--muted)">—</div></div>
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Rev %</div><div class="sp-mini-kpi-val" id="spd-pct">—</div></div>
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">MT Tons</div><div class="sp-mini-kpi-val" id="spd-mt" style="color:var(--orange)">—</div></div>
+        <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">MT %</div><div class="sp-mini-kpi-val" id="spd-mt-pct">—</div></div>
+      </div>
+      <div class="row g-2 mb-4">
+        <div class="col-6"><div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">Revenue Achievement</div><div class="prog-bar" style="height:12px;border-radius:8px"><div class="prog-fill" id="spd-prog" style="width:0%;border-radius:8px"></div></div></div>
+        <div class="col-6"><div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">MT Achievement</div><div class="prog-bar" style="height:12px;border-radius:8px"><div class="prog-fill" id="spd-mt-prog" style="width:0%;border-radius:8px;background:linear-gradient(90deg,var(--orange),#fbbf24)"></div></div></div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-xl-6"><div class="dash-card"><div class="card-title">Monthly Basic Price</div><canvas id="chart-spd-monthly" height="200"></canvas></div></div>
+        <div class="col-xl-6"><div class="dash-card"><div class="card-title">Monthly MT Tons</div><canvas id="chart-spd-mt-monthly" height="200"></canvas></div></div>
+      </div>
+      <div class="row g-3 mb-3">
+        <div class="col-xl-6"><div class="dash-card"><div class="card-title">Weekly Basic Price vs Target</div><canvas id="chart-spd-weekly" height="200"></canvas></div></div>
+        <div class="col-xl-6"><div class="dash-card"><div class="card-title">Weekly MT vs Target</div><canvas id="chart-spd-mt-weekly" height="200"></canvas></div></div>
+      </div>
+      <div class="dash-card mb-3">
+        <div class="card-title">Customers Under This Sales Head</div>
+        <div class="table-responsive" style="max-height:320px;overflow-y:auto">
+          <table class="dash-table">
+            <thead style="position:sticky;top:0"><tr><th>#</th><th>Customer</th><th class="text-end">Basic Price</th><th class="text-end">Revenue</th><th class="text-end">MT</th><th class="text-end">Overdue</th><th class="text-end">Orders</th></tr></thead>
+            <tbody id="spd-cust-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="dash-card mb-3">
+        <div class="card-title">Week-by-Week Performance</div>
+        <div class="table-responsive" style="max-height:380px;overflow-y:auto">
+          <table class="wk-table">
+            <thead style="position:sticky;top:0"><tr><th>Week</th><th class="text-end">Basic (₹)</th><th class="text-end">Revenue (₹)</th><th class="text-end">Target</th><th class="text-end">Rev %</th><th class="text-end">MT</th><th class="text-end">MT Tgt</th><th class="text-end">MT%</th><th class="text-end">Orders</th></tr></thead>
+            <tbody id="spd-week-tbody"></tbody>
+          </table>
         </div>
       </div>
       <div class="row g-3">
-        <!-- MT Achievement -->
-        <div class="col-xl-6">
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div style="font-size:12px;font-weight:700;color:var(--text2)"><i class="bi bi-boxes me-1" style="color:var(--orange)"></i>MT Achievement</div>
-              <span class="mt-badge" id="col-mt-pct-badge">—%</span>
-            </div>
-            <div class="d-flex align-items-end gap-3 mb-3">
-              <div>
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Plan</div>
-                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--muted)" id="col-plan-mt-disp">—</div>
-              </div>
-              <div style="font-size:18px;color:var(--muted2)">vs</div>
-              <div>
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Actual</div>
-                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--orange)" id="col-act-mt-disp">—</div>
-              </div>
-              <div style="margin-left:auto;text-align:right">
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Gap</div>
-                <div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" id="col-mt-gap">—</div>
-              </div>
-            </div>
-            <div class="prog-bar" style="height:10px">
-              <div class="prog-fill" id="col-mt-bar" style="width:0%;background:linear-gradient(90deg,#ea580c,#fb923c)"></div>
-            </div>
-            <div style="font-size:10px;color:var(--muted);margin-top:5px" id="col-mt-bar-label">0 of 0 MT</div>
-          </div>
-        </div>
-        <!-- Sales Achievement -->
-        <div class="col-xl-6">
-          <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:18px 20px">
-            <div class="d-flex align-items-center justify-content-between mb-2">
-              <div style="font-size:12px;font-weight:700;color:var(--text2)"><i class="bi bi-currency-rupee me-1" style="color:var(--accent)"></i>Sales Achievement (₹ Cr)</div>
-              <span class="pbadge p3200" id="col-sales-pct-badge">—%</span>
-            </div>
-            <div class="d-flex align-items-end gap-3 mb-3">
-              <div>
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Plan (₹ Cr)</div>
-                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--muted)" id="col-plan-sales-disp">—</div>
-              </div>
-              <div style="font-size:18px;color:var(--muted2)">vs</div>
-              <div>
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Actual (₹ Cr)</div>
-                <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--accent)" id="col-act-sales-disp">—</div>
-              </div>
-              <div style="margin-left:auto;text-align:right">
-                <div style="font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Gap (₹ Cr)</div>
-                <div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:800" id="col-sales-gap">—</div>
-              </div>
-            </div>
-            <div class="prog-bar" style="height:10px">
-              <div class="prog-fill" id="col-sales-bar" style="width:0%;background:linear-gradient(90deg,#2563eb,#60a5fa)"></div>
-            </div>
-            <div style="font-size:10px;color:var(--muted);margin-top:5px" id="col-sales-bar-label">₹0 Cr of ₹0 Cr</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Charts row -->
-    <div class="row g-3 mb-3">
-      <div class="col-xl-7">
-        <div class="dash-card h-100">
-          <div class="card-title">Collections Trend (Daily)</div>
-          <div class="chart-wrap"><canvas id="chart-col-trend" height="240"></canvas></div>
-        </div>
-      </div>
-      <div class="col-xl-5">
-        <div class="dash-card h-100">
-          <div class="card-title">Outstanding by Payment Terms</div>
-          <div class="chart-wrap"><canvas id="chart-col-terms" height="240"></canvas></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Outstanding Customers Table -->
-    <div class="dash-card">
-      <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
-        <div class="card-title mb-0">Outstanding & Overdue by Customer</div>
-        <div class="d-flex gap-2">
-          <button class="seg-btn active-grp" id="col-view-all" onclick="setColView('all')">All</button>
-          <button class="seg-btn" id="col-view-overdue" onclick="setColView('overdue')">Overdue Only</button>
-        </div>
-      </div>
-      <div class="table-responsive">
-        <table class="dash-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Customer</th>
-              <th>GST No</th>
-              <th class="text-end">Invoiced (₹ Cr)</th>
-              <th class="text-end">Outstanding (₹ Cr)</th>
-              <th class="text-end">Overdue (₹ Cr)</th>
-              <th>Payment Terms</th>
-              <th class="text-end">MT Sold</th>
-              <th class="text-end">Invoices</th>
-            </tr>
-          </thead>
-          <tbody id="col-cust-tbody"></tbody>
-        </table>
+        <div class="col-xl-4"><div class="dash-card"><div class="card-title">Plant Split</div><canvas id="chart-spd-plant" height="200"></canvas></div></div>
+        <div class="col-xl-4"><div class="dash-card"><div class="card-title">Category Split</div><canvas id="chart-spd-cat" height="200"></canvas></div></div>
+        <div class="col-xl-4"><div class="dash-card"><div class="card-title">Yearly Revenue &amp; MT</div><canvas id="chart-spd-yearly" height="200"></canvas></div></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ══════════ PLANTS ══════════ -->
-  <div class="page" id="page-plants">
-    <div class="row g-3 mb-3" id="plant-cards-row"></div>
-    <div class="row g-3 mb-3">
-      <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant Revenue Comparison</div><div class="chart-wrap"><canvas id="chart-plant-rev" height="260"></canvas></div></div></div>
-      <div class="col-xl-6"><div class="dash-card"><div class="card-title">Plant MT Tons</div><div class="chart-wrap"><canvas id="chart-plant-mt" height="260"></canvas></div></div></div>
+<!-- YEARLY -->
+<div class="page" id="page-yearly">
+  <div class="row g-3 mb-3">
+    <div class="col-xl-6"><div class="dash-card h-100"><div class="card-title">Annual Revenue</div><canvas id="chart-yr-rev" height="260"></canvas></div></div>
+    <div class="col-xl-6"><div class="dash-card h-100"><div class="card-title">Annual MT Tons</div><canvas id="chart-yr-mt" height="260"></canvas></div></div>
+  </div>
+  <div class="dash-card">
+    <div class="card-title">Year-over-Year Summary</div>
+    <div class="table-responsive">
+      <table class="dash-table">
+        <thead><tr><th>Year</th><th class="text-end">Basic Price</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th><th class="text-end">Qty</th><th class="text-end">Transactions</th><th class="text-end">Customers</th><th class="text-end">YoY Growth</th></tr></thead>
+        <tbody id="yr-tbody"></tbody>
+      </table>
     </div>
   </div>
-
-  <!-- ══════════ SALES TEAM ══════════ -->
-  <div class="page" id="page-salesperson">
-
-    <!-- Target Config — Individual Plan -->
-    <div class="target-config mb-3">
-      <div class="d-flex align-items-center gap-2 mb-3">
-        <i class="bi bi-sliders" style="color:var(--accent2);font-size:16px"></i>
-        <span style="font-size:13px;font-weight:800;color:var(--text2)">Target Configuration</span>
-        <span style="font-size:11px;color:var(--muted)">(Monthly targets — set individual plans per salesperson)</span>
-      </div>
-      <!-- Global defaults -->
-      <div class="d-flex gap-3 align-items-end flex-wrap mb-3">
-        <div><div class="filter-label mb-1">Default Rev / Person / Month (₹ L)</div>
-          <input type="number" id="sp-target-input" value="50" min="0" class="filter-control" style="width:160px" oninput="syncDefaultTargets()"/></div>
-        <div><div class="filter-label mb-1">Sales Head Total / Month (₹ L)</div>
-          <input type="number" id="head-target-input" value="500" min="0" class="filter-control" style="width:160px"/></div>
-        <div><div class="filter-label mb-1">Default MT Target / Person / Month</div>
-          <input type="number" id="mt-target-input" value="1000" min="0" class="filter-control" style="width:160px" oninput="syncDefaultMTTargets()"/></div>
-        <button class="btn-apply" onclick="applyTargets()"><i class="bi bi-bullseye me-1"></i>Apply &amp; Recalculate</button>
-      </div>
-      <!-- Individual Plan Table -->
-      <div class="dash-card p-0" style="border-radius:10px;overflow:hidden">
-        <div style="padding:10px 16px;background:var(--card2);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase">
-          Individual Monthly Plan (₹ Lakhs &amp; MT Tons) — editable per salesperson
-        </div>
-        <div class="table-responsive">
-          <table class="plan-table">
-            <thead><tr>
-              <th style="width:36px">#</th>
-              <th>Salesperson</th>
-              <th class="text-end">Rev Target (₹ L)</th>
-              <th class="text-end">MT Target</th>
-              <th class="text-end">Actual Rev</th>
-              <th class="text-end">Actual MT</th>
-              <th class="text-end">Rev %</th>
-              <th class="text-end">MT %</th>
-              <th style="min-width:130px">Rev Progress</th>
-            </tr></thead>
-            <tbody id="sp-plan-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sales Head Summary Strip -->
-    <div class="head-summary mb-3">
-      <div class="d-flex align-items-center flex-wrap gap-0">
-        <div class="head-stat"><div class="head-stat-label">Total Team Revenue</div><div class="head-big" style="font-size:28px;color:var(--accent)" id="head-actual-val">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">Revenue Target</div><div class="head-big" style="font-size:20px;color:var(--muted)" id="head-target-val">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">Achievement %</div><div class="head-big" style="font-size:20px" id="head-pct">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">Total MT Tons</div><div class="head-big" style="font-size:20px;color:var(--orange)" id="head-mt-val">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">MT Target</div><div class="head-big" style="font-size:20px;color:var(--muted)" id="head-mt-target">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">MT Achievement</div><div class="head-big" style="font-size:20px" id="head-mt-pct">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">Gap to Target</div><div class="head-big" style="font-size:18px" id="head-gap">—</div></div>
-        <div class="head-stat"><div class="head-stat-label">Total Orders</div><div class="head-big" style="font-size:18px;color:var(--muted)" id="head-txns">—</div></div>
-      </div>
-      <div class="mt-3">
-        <div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">Team Revenue Progress vs Target</div>
-        <div class="prog-bar" style="height:10px;border-radius:8px"><div class="prog-fill" id="head-prog-fill" style="width:0%;border-radius:8px"></div></div>
-      </div>
-    </div>
-
-    <!-- Weekly Head Chart -->
-    <div class="row g-3 mb-4">
-      <div class="col-xl-8"><div class="dash-card"><div class="card-title">Sales Head — Weekly Revenue vs Target</div><div class="chart-wrap"><canvas id="chart-head-weekly" height="180"></canvas></div></div></div>
-      <div class="col-xl-4"><div class="dash-card"><div class="card-title">Weekly MT Tons</div><div class="chart-wrap"><canvas id="chart-head-mt-weekly" height="180"></canvas></div></div></div>
-    </div>
-
-    <!-- View Toggle -->
-    <div class="d-flex align-items-center justify-content-between mb-3">
-      <div style="font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.02em">
-        <i class="bi bi-person-badge-fill me-2" style="color:var(--accent)"></i>Individual Salesperson Performance
-        <span style="font-size:12px;font-weight:500;color:var(--muted);margin-left:8px">Click card to drill down</span>
-      </div>
-      <div class="d-flex gap-2">
-        <button class="seg-btn active-grp" id="view-cards-btn" onclick="setSPView('cards')"><i class="bi bi-grid me-1"></i>Cards</button>
-        <button class="seg-btn" id="view-table-btn" onclick="setSPView('table')"><i class="bi bi-table me-1"></i>Table</button>
-      </div>
-    </div>
-
-    <!-- SP Cards -->
-    <div id="sp-cards-view"><div class="sp-grid" id="sp-cards-grid"></div></div>
-
-    <!-- SP Table -->
-    <div id="sp-table-view" style="display:none">
-      <div class="dash-card mb-4">
-        <div class="card-title">All Salespersons — Target vs Actual</div>
-        <div class="table-responsive">
-          <table class="dash-table">
-            <thead><tr>
-              <th>#</th><th>Salesperson</th>
-              <th class="text-end">Revenue</th><th class="text-end">Rev.Target</th><th class="text-end">Rev.%</th>
-              <th class="text-end">MT Tons</th><th class="text-end">MT Target</th><th class="text-end">MT%</th>
-              <th class="text-end">Gap</th><th class="text-end">Orders</th><th>Progress</th>
-            </tr></thead>
-            <tbody id="sp-table-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- SP Detail Drill-Down -->
-    <div id="sp-detail-panel" style="display:none">
-      <div class="sp-detail-header">
-        <div class="sp-detail-avatar" id="sp-detail-avatar"></div>
-        <div class="flex-grow-1">
-          <div class="sp-detail-name" id="sp-detail-name"></div>
-          <div class="sp-detail-sub" id="sp-detail-sub"></div>
-        </div>
-        <button class="btn-clear" onclick="closeSPDetail()"><i class="bi bi-x-lg me-1"></i>Close</button>
-      </div>
-      <div class="sp-detail-body">
-        <div class="sp-kpi-grid mb-3">
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Revenue</div><div class="sp-mini-kpi-val" id="spd-revenue" style="color:var(--accent)">—</div></div>
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Rev. Target</div><div class="sp-mini-kpi-val" id="spd-target" style="color:var(--muted)">—</div></div>
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">Rev. %</div><div class="sp-mini-kpi-val" id="spd-pct">—</div></div>
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">MT Tons</div><div class="sp-mini-kpi-val" id="spd-mt" style="color:var(--orange)">—</div></div>
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">MT Target</div><div class="sp-mini-kpi-val" id="spd-mt-target" style="color:var(--muted)">—</div></div>
-          <div class="sp-mini-kpi"><div class="sp-mini-kpi-label">MT %</div><div class="sp-mini-kpi-val" id="spd-mt-pct">—</div></div>
-        </div>
-        <div class="row g-2 mb-4">
-          <div class="col-6"><div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">Revenue Achievement</div><div class="prog-bar" style="height:12px;border-radius:8px"><div class="prog-fill" id="spd-prog" style="width:0%;border-radius:8px"></div></div></div>
-          <div class="col-6"><div style="font-size:10px;color:var(--muted);font-weight:700;margin-bottom:5px">MT Tons Achievement</div><div class="prog-bar" style="height:12px;border-radius:8px"><div class="prog-fill" id="spd-mt-prog" style="width:0%;border-radius:8px;background:linear-gradient(90deg,var(--orange),var(--amber))"></div></div></div>
-        </div>
-        <div class="row g-3 mb-3">
-          <div class="col-xl-6"><div class="dash-card"><div class="card-title">Monthly Revenue</div><div class="chart-wrap"><canvas id="chart-spd-monthly" height="200"></canvas></div></div></div>
-          <div class="col-xl-6"><div class="dash-card"><div class="card-title">Monthly MT Tons</div><div class="chart-wrap"><canvas id="chart-spd-mt-monthly" height="200"></canvas></div></div></div>
-        </div>
-        <div class="row g-3 mb-3">
-          <div class="col-xl-6"><div class="dash-card"><div class="card-title">Weekly Revenue vs Target</div><div class="chart-wrap"><canvas id="chart-spd-weekly" height="200"></canvas></div></div></div>
-          <div class="col-xl-6"><div class="dash-card"><div class="card-title">Weekly MT Tons vs Target</div><div class="chart-wrap"><canvas id="chart-spd-mt-weekly" height="200"></canvas></div></div></div>
-        </div>
-        <div class="dash-card mb-3">
-          <div class="card-title">Week-by-Week Performance</div>
-          <div class="table-responsive" style="max-height:380px;overflow-y:auto">
-            <table class="wk-table">
-              <thead style="position:sticky;top:0"><tr>
-                <th>Week</th><th class="text-end">Revenue</th><th class="text-end">Rev.Target</th><th class="text-end">Rev.%</th>
-                <th class="text-end">MT Tons</th><th class="text-end">MT Target</th><th class="text-end">MT%</th>
-                <th class="text-end">Qty</th><th class="text-end">Orders</th><th>Progress</th>
-              </tr></thead>
-              <tbody id="spd-week-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-        <div class="row g-3">
-          <div class="col-xl-4"><div class="dash-card"><div class="card-title">Plant Split</div><div class="chart-wrap"><canvas id="chart-spd-plant" height="200"></canvas></div></div></div>
-          <div class="col-xl-4"><div class="dash-card"><div class="card-title">Category Split</div><div class="chart-wrap"><canvas id="chart-spd-cat" height="200"></canvas></div></div></div>
-          <div class="col-xl-4"><div class="dash-card"><div class="card-title">Yearly Revenue &amp; MT</div><div class="chart-wrap"><canvas id="chart-spd-yearly" height="200"></canvas></div></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══════════ YEARLY ══════════ -->
-  <div class="page" id="page-yearly">
-    <div class="row g-3 mb-3">
-      <div class="col-xl-6"><div class="dash-card h-100"><div class="card-title">Annual Revenue</div><div class="chart-wrap"><canvas id="chart-yr-rev" height="260"></canvas></div></div></div>
-      <div class="col-xl-6"><div class="dash-card h-100"><div class="card-title">Annual MT Tons</div><div class="chart-wrap"><canvas id="chart-yr-mt" height="260"></canvas></div></div></div>
-    </div>
-    <div class="dash-card">
-      <div class="card-title">Year-over-Year Summary</div>
-      <div class="table-responsive">
-        <table class="dash-table">
-          <thead><tr><th>Year</th><th class="text-end">Revenue</th><th class="text-end">MT Tons</th><th class="text-end">Qty</th><th class="text-end">Transactions</th><th class="text-end">Customers</th><th class="text-end">YoY Growth</th></tr></thead>
-          <tbody id="yr-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+</div>
 
 </div><!-- /main -->
 <div id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const API='';
-const setText = (id, value) => {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value;
-};
+const setText=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
 const COLORS=['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#db2777','#0891b2','#65a30d','#ea580c','#6366f1'];
 const GRID='#e2e8f0';
 const FONT={family:"'DM Sans',sans-serif",size:12};
 const PLANT_COLORS={'3200':'#2563eb','3700':'#7c3aed','3300':'#059669','3800':'#d97706'};
-const PLANT_NAMES={'3200':'Pondy (3200)','3700':'Silvassa (3700)','3300':'Roorkee (3300)','3800':'Howrah (3800)'};
-const SP_BG=['#2563eb','#7c3aed','#059669','#d97706','#dc2626','#db2777','#0891b2','#65a30d','#ea580c'];
-const SP_EMO=['🧑‍💼','👩‍💼','👨‍💼','💼','🌟','👩‍🔧','🧑‍🏫','👩‍🏫','🎯'];
-
+const PLANT_NAMES={'3200':'Pondy','3700':'Silvassa','3300':'Roorkee','3800':'Howrah'};
+const SP_BG=['#2563eb','#d97706','#059669','#7c3aed'];
+const SP_EMO=['🧑‍💼','👩‍💼','👨‍💼','💼'];
+const REGION_CLS={North:'rNorth',South:'rSouth',East:'rEast',West:'rWest'};
 const REAL_SALESPERSONS=['Balvinder','Sakthivel','Bishwajeet','West Customer'];
+const SP_REGION={'Balvinder':'North','Sakthivel':'South','Bishwajeet':'East','West Customer':'West'};
+const SP_INDIVIDUAL_TARGETS={};
+REAL_SALESPERSONS.forEach(sp=>{SP_INDIVIDUAL_TARGETS[sp]={rev:50,mt:1000};});
 
-// Individual per-person targets (₹ Lakhs/month, MT/month)
-const SP_INDIVIDUAL_TARGETS = {};
-REAL_SALESPERSONS.forEach(sp => { SP_INDIVIDUAL_TARGETS[sp] = {rev:50, mt:1000}; });
-
-let F={customer:'',from_date:'',to_date:'',week:'',year:'',plant:''};
+let F={customer:'',from_date:'',to_date:'',week:'',year:'',plant:'',region:'',material:''};
 let trendGroup='month';
-// let HEAD_TARGET_LAKHS=500;
-let _spData=[],_weeklyData=null,_allSPDetails=null,_selectedSP=null,_spView='cards';
+let _spData=[],_weeklyData=null,_selectedSP=null,_spView='cards';
 let _custData=[];
+let colTab='wtd',colView='all',colTrendGroup='week';
 const charts={};
 const q=id=>document.getElementById(id);
 
-function fmtRupee(n){if(!n||isNaN(n))return'₹0';n=+n;if(n>=1e7)return'₹'+(n/1e7).toFixed(2)+' Cr';if(n>=1e5)return'₹'+(n/1e5).toFixed(2)+' L';return'₹'+n.toLocaleString('en-IN',{maximumFractionDigits:0});}
-function fmtQty(n){if(!n||isNaN(n))return'0';n=+n;if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return String(Math.round(n));}
-function fmtMT(n){if(!n||isNaN(n))return'0 MT';return(+n).toLocaleString('en-IN',{maximumFractionDigits:2})+' MT';}
-function fmtMTshort(n){if(!n||isNaN(n))return'0';n=+n;if(n>=1000)return(n/1000).toFixed(2)+'K MT';return n.toFixed(1)+' MT';}
-function fmtK(n){return n>=1e5?(n/1e5).toFixed(1)+'L':n>=1e3?(n/1e3).toFixed(0)+'K':String(n||0);}
-function fmtCr(value){
-  const cr = Number(value || 0) / 10000000;
-  return `₹${cr.toFixed(2)} Cr`;
-}
+function fmtCr(v){v=+v||0;return'₹'+(v/1e7).toFixed(2)+' Cr';}
+function fmtRupee(v){v=+v||0;if(v>=1e7)return'₹'+(v/1e7).toFixed(2)+' Cr';if(v>=1e5)return'₹'+(v/1e5).toFixed(2)+' L';return'₹'+v.toLocaleString('en-IN',{maximumFractionDigits:0});}
+function fmtMT(v){return(+v||0).toLocaleString('en-IN',{maximumFractionDigits:2})+' MT';}
+function fmtQty(v){v=+v||0;if(v>=1e6)return(v/1e6).toFixed(2)+'M';if(v>=1e3)return(v/1e3).toFixed(1)+'K';return String(Math.round(v));}
+function escH(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function regionPill(r){const cls=REGION_CLS[r]||'';return`<span class="pbadge ${cls}">${r||'—'}</span>`;}
+function pctColor(p){return p>=100?'var(--accent3)':p>=75?'var(--accent4)':'var(--danger)';}
 
 async function apiFetch(p){const r=await fetch(API+p);if(!r.ok)throw new Error(await r.text());return r.json();}
 function buildQuery(e={}){const p={...F,...e};return'?'+Object.entries(p).filter(([,v])=>v).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join('&');}
 function toast(msg,color='#059669'){const t=q('toast');t.innerHTML=`<i class="bi bi-check-circle-fill me-2" style="color:${color}"></i>${msg}`;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
-function destroyChart(id){if(charts[id]){charts[id].destroy();delete charts[id];}}
 
 Chart.defaults.color='#64748b';Chart.defaults.font=FONT;
 const gridP={grid:{color:GRID},ticks:{font:FONT}};
+function mkChart(id,cfg){if(charts[id]){charts[id].destroy();delete charts[id];}const el=q(id);if(!el)return;charts[id]=new Chart(el,cfg);return charts[id];}
+function barChart(id,labels,datasets,opts={}){return mkChart(id,{type:'bar',data:{labels,datasets:datasets.map((d,i)=>({label:d.label,data:d.data.map(v=>+(v||0)),backgroundColor:d.colors||(Array.isArray(d.color)?d.color:(d.color||COLORS[i]+'cc')),borderRadius:5,borderSkipped:false,...(d.extra||{})}))},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}},...opts}});}
+function doughnutChart(id,labels,data){return mkChart(id,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:COLORS.slice(0,labels.length),borderWidth:2,hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{font:FONT,boxWidth:10,padding:8}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${fmtCr(ctx.raw)}`}}}}});}
 
-function makeChart(id,cfg){
-  destroyChart(id);
-  const el=q(id);if(!el)return;
-  charts[id]=new Chart(el,cfg);return charts[id];
-}
-function formatChartValue(label, value){
-  if(label === 'MT Tons') return fmtMT(value);
-  if(label === 'Revenue') return fmtCr(value);
-  return value;
-}
-function barChart(id, labels, datasets){
-  return makeChart(id, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: datasets.map((d, i) => ({
-        label: d.label,
-        data: d.data.map(v => Number(v || 0)), 
-        backgroundColor:
-          d.colors ||
-          (Array.isArray(d.color)
-            ? d.color
-            : (d.color || COLORS[i] + 'cc')),
-        borderRadius: 5,
-        borderSkipped: false,
-        ...(d.extra || {})
-      }))
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      scales: {
-        x: gridP,
-        y: {
-          ...gridP,
-          ticks: {
-            ...(gridP?.ticks || {}),
-            callback: function(value){
-              return value; 
-            }
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          labels: {
-            font: FONT,
-            boxWidth: 10
-          }
-        },
-        tooltip: {
-          callbacks: {
-            label: function(ctx){
-              return `${ctx.dataset.label}: ${formatChartValue(ctx.dataset.label, ctx.raw)}`;
-            }
-          }
-        }
-      }
-    }
-  });
-}
-// function barChart(id,labels,datasets){
-//   return makeChart(id,{
-//     type:'bar',
-//     data:{
-//       labels,
-//       datasets:datasets.map((d,i)=>({
-//         label:d.label,
-//         data:d.data,
-//         backgroundColor:d.colors ||
-//           (Array.isArray(d.color)
-//             ? d.color
-//             : (d.color || COLORS[i] + 'cc')),
-//         borderRadius:5,
-//         borderSkipped:false,
-//         ...(d.extra||{})
-//       }))
-//     },
-//     options:{
-//       responsive:true,
-//       maintainAspectRatio:true,
-//       scales:{
-//         x:gridP,
-//         y:{
-//           ...gridP,
-//           ticks:{
-//             ...gridP.ticks,
-//             callback:v=>fmtCr(v)
-//           }
-//         }
-//       },
-//       plugins:{
-//         legend:{
-//           labels:{
-//             font:FONT,
-//             boxWidth:10
-//           }
-//         },
-//         tooltip:{
-//           callbacks:{
-//             label:(ctx)=>
-//               `${ctx.dataset.label}: ${fmtCr(ctx.raw)}`
-//           }
-//         }
-//       }
-//     }
-//   });
-// }
-
-// function lineArea(id,labels,datasets){
-//   return makeChart(id,{
-//     type:'line',
-//     data:{
-//       labels,
-//       datasets:datasets.map((d,i)=>({
-//         label:d.label,
-//         data:d.data,
-//         borderColor:d.color || COLORS[i],
-//         backgroundColor:(d.color || COLORS[i]) + '22',
-//         fill:true,
-//         tension:.4,
-//         pointRadius:2,
-//         borderWidth:2
-//       }))
-//     },
-//     options:{
-//       responsive:true,
-//       maintainAspectRatio:true,
-//       scales:{
-//         x:gridP,
-//         y:{
-//           ...gridP,
-//           ticks:{
-//             ...gridP.ticks,
-//             callback:v=>fmtCr(v)
-//           }
-//         }
-//       },
-//       plugins:{
-//         legend:{
-//           labels:{
-//             font:FONT,
-//             boxWidth:10
-//           }
-//         },
-//         tooltip:{
-//           callbacks:{
-//             label:(ctx)=>
-//               `${ctx.dataset.label}: ${fmtCr(ctx.raw)}`
-//           }
-//         }
-//       }
-//     }
-//   });
-// }
-
-function formatChartValue(label, value){
-  const v = Number(value || 0);
-  if(label === 'MT Tons') return fmtMT(v);
-  if(label === 'Revenue') return fmtCr(v);
-  if(label === 'Qty') return fmtQty(v);
-  return v;
-}
-
-// function lineArea(id, labels, datasets){
-//   const mainLabel = datasets?.[0]?.label || '';
-//   return makeChart(id, {
-//     type: 'line',
-//     data: {
-//       labels,
-//       datasets: datasets.map((d, i) => ({
-//         label: d.label,
-//         data: d.data,
-//         borderColor: d.color || COLORS[i],
-//         backgroundColor: (d.color || COLORS[i]) + '22',
-//         fill: true,
-//         tension: 0.4,
-//         pointRadius: 2,
-//         borderWidth: 2
-//       }))
-//     },
-//     options: {
-//       responsive: true,
-//       maintainAspectRatio: true,
-//       scales: {
-//         x: gridP,
-//         y: {
-//           ...gridP,
-//           ticks: {
-//             ...(gridP?.ticks || {}),
-//             callback: function(value){
-//               return formatChartValue(mainLabel, value);
-//             }
-//           }
-//         }
-//       },
-//       plugins: {
-//         legend: {
-//           labels: {
-//             font: FONT,
-//             boxWidth: 10
-//           }
-//         },
-//         tooltip: {
-//           callbacks: {
-//             label: function(ctx){
-//               return `${ctx.dataset.label}: ${formatChartValue(ctx.dataset.label, ctx.raw)}`;
-//             }
-//           }
-//         }
-//       }
-//     }
-//   });
-// }
-
-function lineArea(id, labels, datasets){
-
-  return makeChart(id, {
-
-    type: 'line',
-
-    data: {
-      labels,
-
-      datasets: datasets.map((d, i) => ({
-
-        label: d.label,
-
-        data: d.data.map(v => Number(v || 0)),
-
-        borderColor: d.color || COLORS[i],
-
-        backgroundColor: (d.color || COLORS[i]) + '22',
-
-        fill: true,
-
-        tension: 0.4,
-
-        pointRadius: 2,
-
-        borderWidth: 2,
-
-        yAxisID: d.label === 'MT Tons' ? 'y1' : 'y'
-      }))
-    },
-
-    options: {
-
-      responsive: true,
-
-      maintainAspectRatio: true,
-
-      scales: {
-
-        x: gridP,
-
-        // Revenue axis
-        y: {
-
-          ...gridP,
-
-          position: 'left',
-
-          ticks: {
-
-            ...(gridP?.ticks || {}),
-
-            callback: function(value){
-
-              return fmtCr(value);
-
-            }
-          }
-        },
-
-        // MT axis
-        y1: {
-
-          ...gridP,
-
-          position: 'right',
-
-          grid: {
-
-            drawOnChartArea: false
-          },
-
-          ticks: {
-
-            ...(gridP?.ticks || {}),
-
-            callback: function(value){
-
-              return fmtMT(value);
-
-            }
-          }
-        }
-      },
-
-      plugins: {
-
-        legend: {
-
-          labels: {
-
-            font: FONT,
-
-            boxWidth: 10
-          }
-        },
-
-        tooltip: {
-
-          callbacks: {
-
-            label: function(ctx){
-
-              return `${ctx.dataset.label}: ${formatChartValue(ctx.dataset.label, ctx.raw)}`;
-
-            }
-          }
-        }
-      }
-    }
-  });
-}
-
-function doughnutChart(id,labels,data){
-  return makeChart(id,{
-    type:'doughnut',
-    data:{
-      labels,
-      datasets:[{
-        data,
-        backgroundColor:COLORS.slice(0,labels.length),
-        borderWidth:2,
-        hoverOffset:6
-      }]
-    },
-    options:{
-      responsive:true,
-      maintainAspectRatio:true,
-      plugins:{
-        legend:{
-          position:'bottom',
-          labels:{
-            font:FONT,
-            boxWidth:10,
-            padding:8
-          }
-        },
-        tooltip:{
-          callbacks:{
-            label:(ctx)=>
-              `${ctx.label}: ${fmtCr(ctx.raw)}`
-          }
-        }
-      }
-    }
-  });
-}
-
-/* ─── FILTERS ─── */
 async function init(){
   try{
     const meta=await apiFetch('/api/meta');
@@ -1207,7 +666,7 @@ async function init(){
     const sw=q('sel-week');
     meta.weeks.forEach(w=>{const o=document.createElement('option');o.value=w;o.textContent=w;sw.appendChild(o);});
     await applyFilters();
-  }catch(e){toast('Init error: '+e.message,'#dc2626');}
+  }catch(e){console.error(e);toast('Init error: '+e.message,'#dc2626');}
 }
 
 async function applyFilters(){
@@ -1217,6 +676,8 @@ async function applyFilters(){
   F.week=q('sel-week').value;
   F.from_date=q('inp-from').value;
   F.to_date=q('inp-to').value;
+  F.region=q('sel-region').value;
+  F.material=q('sel-material').value;
   const active=Object.values(F).filter(Boolean);
   q('date-range-label').textContent=active.length?active.length+' filter(s) active':'Last 7 days';
   adjustMainPadding();
@@ -1224,20 +685,15 @@ async function applyFilters(){
   if(page) await loadPage(page);
 }
 function clearFilters(){
-  ['sel-customer','sel-plant','sel-year','sel-week'].forEach(id=>q(id).value='');
+  ['sel-customer','sel-plant','sel-year','sel-week','sel-region','sel-material'].forEach(id=>q(id).value='');
   ['inp-from','inp-to'].forEach(id=>q(id).value='');
-  F={customer:'',from_date:'',to_date:'',week:'',year:'',plant:''};
+  F={customer:'',from_date:'',to_date:'',week:'',year:'',plant:'',region:''};
   q('date-range-label').textContent='Last 7 days';
   applyFilters();
 }
-function setGroup(g){
-  trendGroup=g;
-  ['month','week','day'].forEach(x=>q('grp-'+x)?.classList.toggle('active-grp',x===g));
-  loadOverview();
-}
+function setGroup(g){trendGroup=g;['month','week','day'].forEach(x=>q('grp-'+x)?.classList.toggle('active-grp',x===g));loadOverview();}
 
-/* ─── PAGE NAV ─── */
-const PAGE_TITLES={overview:'Overview',customers:'Customers',trends:'Revenue Trends',collections:'Collections',plants:'Plant Performance',salesperson:'Sales Team',yearly:'Yearly Summary'};
+const PAGE_TITLES={overview:'Overview',customers:'Customers',collections:'Collections',plants:'Plant Performance',salesperson:'Sales Team',yearly:'Yearly Summary'};
 function showPage(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -1250,15 +706,13 @@ async function loadPage(name){
   try{
     if(name==='overview') await loadOverview();
     else if(name==='customers') await loadCustomers();
-    else if(name==='trends') await loadTrends();
     else if(name==='collections') await loadCollections();
     else if(name==='plants') await loadPlants();
     else if(name==='salesperson') await loadSalesperson();
     else if(name==='yearly') await loadYearly();
-  }catch(e){console.error(e);toast('Error loading '+name+': '+e.message,'#dc2626');}
+  }catch(e){console.error(e);toast('Error: '+e.message,'#dc2626');}
 }
 
-/* ─── OVERVIEW ─── */
 async function loadOverview(){
   const [kpi,trend,cats,topC,plts]=await Promise.all([
     apiFetch('/api/kpis'+buildQuery()),
@@ -1267,122 +721,97 @@ async function loadOverview(){
     apiFetch('/api/top_customers'+buildQuery({limit:10})),
     apiFetch('/api/plant_breakdown'+buildQuery()),
   ]);
+  setText('record-badge',(kpi.record_count||0).toLocaleString()+' records');
+  setText('kpi-basic', fmtRupee(kpi.total_basic||0));
+  setText('kpi-basic-sub','After GST: '+fmtRupee(kpi.total_revenue||0));
+  setText('kpi-revenue',fmtRupee(kpi.total_revenue||0));
+  setText('kpi-gst-sub','GST: '+fmtRupee(kpi.total_gst||0));
+  setText('kpi-mt',fmtMT(kpi.total_mt_tons));
+  setText('kpi-qty-sub',fmtQty(kpi.total_qty)+' pieces');
+  setText('kpi-customers',kpi.unique_customers);
+  setText('kpi-outstanding',fmtRupee(kpi.outstanding||0));
+  setText('kpi-overdue',fmtRupee(kpi.overdue||0));
 
-  setText('record-badge', kpi.record_count.toLocaleString() + ' records');
+  mkChart('chart-revenue-trend',{type:'bar',data:{labels:trend.map(t=>t.label),datasets:[
+    {label:'Basic Price',data:trend.map(t=>t.basic||0),backgroundColor:'#05996999',borderRadius:4,order:2,yAxisID:'y'},
+    {label:'Revenue',data:trend.map(t=>t.revenue||0),backgroundColor:'#2563eb44',borderRadius:4,order:3,yAxisID:'y'},
+    {label:'MT Tons',data:trend.map(t=>t.mt_tons||0),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,order:1,yAxisID:'y2'},
+  ]},options:{responsive:true,maintainAspectRatio:true,
+    scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtCr(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>fmtMT(v)},grid:{drawOnChartArea:false}}},
+    plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label==='MT Tons'?`MT: ${fmtMT(ctx.raw)}`:`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}}}});
 
-  setText('kpi-revenue', fmtRupee(kpi.total_revenue || 0));
+  doughnutChart('chart-category-pie',cats.map(c=>c.category),cats.map(c=>c.basic||0));
 
-  setText('kpi-qty', fmtQty(kpi.total_qty));
+  mkChart('chart-top-cust-bar',{type:'bar',data:{labels:topC.map(c=>c.customer.substring(0,22)),datasets:[
+    {label:'Basic Price',data:topC.map(c=>c.basic||0),backgroundColor:COLORS.map(c=>c+'bb'),borderRadius:5,borderSkipped:false},
+  ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,scales:{x:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}},y:gridP},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}}}});
 
-  setText('kpi-mt', fmtMT(kpi.total_mt_tons));
+  doughnutChart('chart-region-donut',plts.map(p=>p.plant_name),plts.map(p=>p.basic||0));
 
-  setText('kpi-customers', kpi.unique_customers);
-
-  setText('kpi-transactions', kpi.transactions.toLocaleString());
-
-  makeChart('chart-revenue-trend',{type:'bar',
-    data:{labels:trend.map(t=>t.label),datasets:[
-      {label:'Revenue',data:trend.map(t=>t.revenue),backgroundColor:'#2563eb99',borderRadius:4,order:2,yAxisID:'y'},
-      {label:'MT Tons',data:trend.map(t=>t.mt_tons),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:2,order:1,yAxisID:'y2'},
-    ]},
-    options:{responsive:true,maintainAspectRatio:true,
-      // scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtK(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>v.toFixed(0)+' MT'},grid:{drawOnChartArea:false}}},
-      scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtCr(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>fmtMTshort(v)},grid:{drawOnChartArea:false}}},
-      plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-  doughnutChart('chart-category-pie',cats.map(c=>c.category),cats.map(c=>c.revenue));
-
-  const topRev=Math.max(...topC.map(c=>c.revenue));
-  makeChart('chart-top-cust-bar',{type:'bar',
-    data:{labels:topC.map(c=>c.customer.substring(0,22)),datasets:[
-      {label:'Revenue',data:topC.map(c=>c.revenue),backgroundColor:COLORS.map(c=>c+'bb'),borderRadius:5,borderSkipped:false},
-    ]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:true,scales:{x:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtK(v)}},y:gridP},plugins:{legend:{display:false}}}});
-
-  doughnutChart('chart-region-donut',plts.map(p=>p.plant_name),plts.map(p=>p.revenue));
-
-  const totalRev=topC.reduce((s,c)=>s+c.revenue,0)||1;
-  q('top5-tbody').innerHTML=topC.map((c,i)=>{
-    const pct=((c.revenue/totalRev)*100).toFixed(1);
-    return `<tr onclick="openCustomerDetail('${escH(c.customer)}')">
-      <td><span class="rank-badge" style="background:${COLORS[i]+'22'};color:${COLORS[i]}">${i+1}</span></td>
-      <td style="font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis">${escH(c.customer)}</td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(c.revenue)}</td>
-      <td class="text-end"><span class="mt-badge">${fmtMT(c.mt_tons)}</span></td>
-      <td class="text-end mono" style="color:var(--muted)">${fmtQty(c.qty)}</td>
-      <td class="text-end mono" style="color:var(--muted)">${c.transactions}</td>
-    </tr>`;
-  }).join('');
+  const totalRev=topC.reduce((s,c)=>s+(c.revenue||0),0)||1;
+  q('top5-tbody').innerHTML=topC.map((c,i)=>`<tr onclick="openCustomerDetail('${escH(c.customer)}')">
+    <td><span class="rank-badge" style="background:${COLORS[i]+'22'};color:${COLORS[i]}">${i+1}</span></td>
+    <td style="font-weight:600;max-width:180px;overflow:hidden;text-overflow:ellipsis">${escH(c.customer)}</td>
+    <td>${regionPill(c.region)}</td>
+    <td style="font-size:11px;color:var(--muted)">${c.salesperson||'—'}</td>
+    <td class="text-end mono" style="color:var(--accent3)">${fmtCr(c.basic||0)}</td>
+    <td class="text-end mono" style="color:var(--accent)">${fmtCr(c.revenue||0)}</td>
+    <td class="text-end"><span class="mt-badge">${fmtMT(c.mt_tons)}</span></td>
+    <td class="text-end mono">${c.transactions}</td>
+  </tr>`).join('');
 }
 
-/* ─── CUSTOMERS PAGE ─── */
 async function loadCustomers(){
-  // close any open detail
   q('cust-detail-panel').style.display='none';
   q('cust-list-view').style.display='block';
-
-  const [topC,kpi]=await Promise.all([
-    apiFetch('/api/top_customers'+buildQuery({limit:200})),
-    apiFetch('/api/kpis'+buildQuery()),
-  ]);
+  const [topC,kpi]=await Promise.all([apiFetch('/api/top_customers'+buildQuery({limit:200})),apiFetch('/api/kpis'+buildQuery())]);
   _custData=topC;
-
-  q('c-kpi-total').textContent=kpi.unique_customers;
-  q('c-kpi-rev').textContent=fmtRupee(kpi.total_revenue);
-  q('c-kpi-mt').textContent=fmtMT(kpi.total_mt_tons);
-  q('c-kpi-orders').textContent=kpi.transactions.toLocaleString();
-
+  setText('c-kpi-total',kpi.unique_customers);
+  setText('c-kpi-basic',fmtCr(kpi.total_basic||0));
+  setText('c-kpi-rev',fmtCr(kpi.total_revenue||0));
+  setText('c-kpi-mt',fmtMT(kpi.total_mt_tons));
   filterCustomerCards();
 }
 
 function filterCustomerCards(){
   const search=(q('cust-search-inp')?.value||'').toLowerCase();
-  const regionF=(q('cust-region-filter')?.value||'');
-  const plantF=(q('cust-plant-filter')?.value||'');
+  const regionF=q('cust-region-filter')?.value||'';
   const sortBy=q('cust-sort')?.value||'revenue';
   let limit=parseInt(q('cust-limit')?.value||'20');
-
   let data=[..._custData];
   if(search) data=data.filter(c=>c.customer.toLowerCase().includes(search));
-  // sort
-  data.sort((a,b)=>b[sortBy==='revenue'?'revenue':sortBy==='mt'?'mt_tons':'transactions']-(a[sortBy==='revenue'?'revenue':sortBy==='mt'?'mt_tons':'transactions']));
+  if(regionF) data=data.filter(c=>c.region===regionF);
+  data.sort((a,b)=>b[sortBy==='mt'?'mt_tons':'revenue']-(a[sortBy==='mt'?'mt_tons':'revenue']));
   if(limit>0) data=data.slice(0,limit);
-
   q('cust-count-badge').textContent=data.length+' customers';
-
-  const totalRev=_custData.reduce((s,c)=>s+c.revenue,0)||1;
-
-  // Cards
+  const totalRev=_custData.reduce((s,c)=>s+(c.revenue||0),0)||1;
   q('cust-cards-grid').innerHTML=data.slice(0,24).map((c,i)=>{
     const initials=c.customer.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
     return `<div class="cust-card" onclick="openCustomerDetail('${escH(c.customer)}')">
       <div class="cust-card-head">
-        <div class="cust-avatar" style="background:${COLORS[i%COLORS.length]}">${initials}</div>
-        <div>
-          <div class="cust-name">${escH(c.customer.substring(0,36))}</div>
-          <div class="cust-meta">${c.transactions} orders · ${((c.revenue/totalRev)*100).toFixed(1)}% revenue share</div>
-        </div>
+        <div class="cust-avatar" style="background:${COLORS[i%10]}">${initials}</div>
+        <div><div class="cust-name">${escH(c.customer.substring(0,36))}</div>
+          <div class="cust-meta">${regionPill(c.region)} ${c.salesperson||''} · ${c.transactions} orders</div></div>
       </div>
       <div class="cust-stats">
-        <div class="cust-stat"><div class="cust-stat-lbl">Revenue</div><div class="cust-stat-val" style="color:var(--accent)">${fmtRupee(c.revenue)}</div></div>
+        <div class="cust-stat"><div class="cust-stat-lbl">Basic Price</div><div class="cust-stat-val" style="color:var(--accent3)">${fmtCr(c.basic||0)}</div></div>
         <div class="cust-stat"><div class="cust-stat-lbl">MT Tons</div><div class="cust-stat-val" style="color:var(--orange)">${fmtMT(c.mt_tons)}</div></div>
       </div>
     </div>`;
   }).join('');
-
-  // Table
   q('cust-table-tbody').innerHTML=data.map((c,i)=>{
     const pct=((c.revenue/totalRev)*100).toFixed(1);
-    const w=Math.min(Math.round(c.revenue/totalRev*100*3),100);
+    const w=Math.min(Math.round(c.revenue/totalRev*300),100);
     return `<tr onclick="openCustomerDetail('${escH(c.customer)}')">
-      <td><span class="rank-badge" style="background:${COLORS[i%COLORS.length]+'22'};color:${COLORS[i%COLORS.length]}">${i+1}</span></td>
-      <td style="font-weight:600;max-width:240px;overflow:hidden;text-overflow:ellipsis">${escH(c.customer)}</td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(c.revenue)}</td>
+      <td><span class="rank-badge" style="background:${COLORS[i%10]+'22'};color:${COLORS[i%10]}">${i+1}</span></td>
+      <td style="font-weight:600">${escH(c.customer)}</td>
+      <td>${regionPill(c.region)}</td>
+      <td style="font-size:11px;color:var(--muted)">${c.salesperson||'—'}</td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(c.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(c.revenue||0)}</td>
       <td class="text-end"><span class="mt-badge">${fmtMT(c.mt_tons)}</span></td>
-      <td class="text-end mono" style="color:var(--muted)">${fmtQty(c.qty)}</td>
-      <td class="text-end mono" style="color:var(--muted)">${c.transactions}</td>
-      <td style="min-width:140px"><div style="display:flex;align-items:center;gap:7px">
-        <div class="prog-bar" style="width:100px;height:5px"><div class="prog-fill" style="width:${w}%;background:${COLORS[i%COLORS.length]}"></div></div>
-        <span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace">${pct}%</span>
-      </div></td>
+      <td class="text-end mono">${c.transactions}</td>
+      <td><div style="display:flex;align-items:center;gap:7px"><div class="prog-bar" style="width:100px;height:5px"><div class="prog-fill" style="width:${w}%;background:${COLORS[i%10]}"></div></div><span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace">${pct}%</span></div></td>
     </tr>`;
   }).join('');
 }
@@ -1391,358 +820,267 @@ async function openCustomerDetail(customer){
   try{
     showPage('customers');
     q('cust-list-view').style.display='none';
-    const panel=q('cust-detail-panel');
-    panel.style.display='block';
+    const panel=q('cust-detail-panel');panel.style.display='block';
     panel.scrollIntoView({behavior:'smooth',block:'start'});
-
     const d=await apiFetch('/api/customer_detail?customer='+encodeURIComponent(customer));
     const initials=customer.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
     q('cd-avatar').textContent=initials;
     q('cd-name').textContent=d.customer;
-    q('cd-meta').textContent=`Region: ${d.region||'—'} · Plant: ${PLANT_NAMES[d.plant_code]||d.plant_name||'—'} · First order: ${d.first_order} · Last: ${d.last_order}`;
-    q('cd-revenue').textContent=fmtRupee(d.total_revenue);
-    q('cd-mt').textContent=fmtMT(d.total_mt_tons);
-    q('cd-qty').textContent=fmtQty(d.total_qty);
-    q('cd-txns').textContent=d.transactions;
-
-    // Monthly combined chart
-    makeChart('chart-cd-monthly',{type:'bar',
-      data:{labels:d.monthly.map(m=>m.label),datasets:[
-        {label:'Revenue',data:d.monthly.map(m=>m.revenue),backgroundColor:'#2563eb99',borderRadius:4,order:2,yAxisID:'y'},
-        {label:'MT Tons',data:d.monthly.map(m=>m.mt_tons),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,order:1,yAxisID:'y2'},
-      ]},
-      options:{responsive:true,maintainAspectRatio:true,
-        scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtK(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>v.toFixed(0)+' MT'},grid:{drawOnChartArea:false}}},
-        plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-
-    doughnutChart('chart-cd-cat',d.categories.map(c=>c.category),d.categories.map(c=>c.revenue));
-
+    q('cd-meta').textContent=`Region: ${d.region||'—'} · Sales Head: ${d.salesperson||'—'} · Plant: ${PLANT_NAMES[d.plant_code]||d.plant_code||'—'} · Credit: ${d.credit_days||30}d (${d.payment_terms||'—'}) · ${d.first_order} → ${d.last_order}`;
+    setText('cd-basic',fmtCr(d.total_basic||0));
+    setText('cd-revenue',fmtCr(d.total_revenue||0));
+    setText('cd-mt',fmtMT(d.total_mt_tons));
+    setText('cd-overdue',fmtCr(d.overdue||0));
+    mkChart('chart-cd-monthly',{type:'bar',data:{labels:d.monthly.map(m=>m.label),datasets:[
+      {label:'Basic Price',data:d.monthly.map(m=>m.basic||0),backgroundColor:'#05996999',borderRadius:4,order:2,yAxisID:'y'},
+      {label:'Revenue',data:d.monthly.map(m=>m.revenue||0),backgroundColor:'#2563eb44',borderRadius:4,order:3,yAxisID:'y'},
+      {label:'MT Tons',data:d.monthly.map(m=>m.mt_tons||0),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,order:1,yAxisID:'y2'},
+    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtCr(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>fmtMT(v)},grid:{drawOnChartArea:false}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
+    doughnutChart('chart-cd-cat',d.categories.map(c=>c.category),d.categories.map(c=>c.basic||0));
     q('cd-monthly-tbody').innerHTML=d.monthly.map(m=>`<tr>
       <td style="font-weight:600">${m.label}</td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(m.revenue)}</td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(m.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(m.revenue||0)}</td>
       <td class="text-end"><span class="mt-badge">${fmtMT(m.mt_tons)}</span></td>
-      <td class="text-end mono" style="color:var(--muted)">${fmtQty(m.qty)}</td>
     </tr>`).join('');
-  }catch(e){toast('Customer error: '+e.message,'#dc2626');}
+  }catch(e){toast('Error: '+e.message,'#dc2626');}
 }
-function closeCustDetail(){
-  q('cust-detail-panel').style.display='none';
-  q('cust-list-view').style.display='block';
-}
+function closeCustDetail(){q('cust-detail-panel').style.display='none';q('cust-list-view').style.display='block';}
 
-/* ─── TRENDS ─── */
 async function loadTrends(){
   const trend=await apiFetch('/api/revenue_trend'+buildQuery({group_by:'month'}));
-  lineArea('chart-trend-rev',trend.map(t=>t.label),[{label:'Revenue',data:trend.map(t=>t.revenue),color:'#2563eb'}]);
-  lineArea('chart-trend-mt',trend.map(t=>t.label),[{label:'MT Tons',data:trend.map(t=>t.mt_tons),color:'#ea580c'}]);
+  mkChart('chart-trend-rev',{type:'line',data:{labels:trend.map(t=>t.label),datasets:[
+    {label:'Basic Price',data:trend.map(t=>t.basic||0),borderColor:'#059669',backgroundColor:'#05996920',fill:true,tension:.4,pointRadius:2,borderWidth:2},
+    {label:'Revenue',data:trend.map(t=>t.revenue||0),borderColor:'#2563eb',backgroundColor:'#2563eb15',fill:true,tension:.4,pointRadius:2,borderWidth:2},
+  ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}}}});
+  mkChart('chart-trend-mt',{type:'line',data:{labels:trend.map(t=>t.label),datasets:[{label:'MT Tons',data:trend.map(t=>t.mt_tons||0),borderColor:'#ea580c',backgroundColor:'#ea580c20',fill:true,tension:.4,pointRadius:2,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`MT: ${fmtMT(ctx.raw)}`}}}}});
 }
 
-
-/* ─── COLLECTIONS ─── */
-let colTab='mtd';
-let colView='all';
-let colChartTrend=null, colChartTerms=null;
-
-function setColTab(t){
-  colTab=t;
-  ['mtd','wtd','ytd'].forEach(x=>q('col-tab-'+x)?.classList.toggle('active-grp',x===t));
-  loadCollections();
-}
-function setColView(v){
-  colView=v;
-  ['all','overdue'].forEach(x=>q('col-view-'+x)?.classList.toggle('active-grp',x===v));
-  renderColTable(window._colData||[]);
-}
+function setColTab(t){colTab=t;['wtd','mtd','ytd'].forEach(x=>q('col-tab-'+x)?.classList.toggle('active-grp',x===t));loadCollections();}
+function setColView(v){colView=v;['all','overdue'].forEach(x=>q('col-view-'+x)?.classList.toggle('active-grp',x===v));renderColTable(window._colData||[]);}
+function setColTrend(g){colTrendGroup=g;['day','week','month'].forEach(x=>q('col-trend-'+x)?.classList.toggle('active-grp',x===g));renderColTrendChart(window._colTrendData||[]);}
 
 async function loadCollections(){
   const data=await apiFetch('/api/collections'+buildQuery({period:colTab}));
   window._colData=data.customers||[];
-
-  // Period label
-  const periodLabels={mtd:'Month-to-Date',wtd:'Week-to-Date',ytd:'Year-to-Date'};
-  setText('col-period-label', `${periodLabels[colTab]} · as of ${data.as_of||'today'}`);
-
-  // KPIs
-  const toCr=v=>((v||0)/1e7).toFixed(2);
-  setText('col-total-inv','₹'+toCr(data.total_invoiced)+' Cr');
-  setText('col-outstanding','₹'+toCr(data.outstanding)+' Cr');
-  setText('col-overdue','₹'+toCr(data.overdue)+' Cr');
-  setText('col-collected','₹'+toCr(data.collected)+' Cr');
-  setText('col-mt', fmtMT(data.total_mt||0));
+  const pLbls={wtd:'Week-to-Date (Sun–Sat)',mtd:'Month-to-Date',ytd:'Year-to-Date'};
+  setText('col-period-label',pLbls[colTab]+' · as of '+data.as_of);
+  setText('col-basic',fmtCr(data.total_basic||0));
+  setText('col-total-inv',fmtCr(data.total_invoiced||0));
+  setText('col-outstanding',fmtCr(data.outstanding||0));
+  setText('col-overdue',fmtCr(data.overdue||0));
+  setText('col-mt',fmtMT(data.total_mt||0));
   setText('col-invoices',(data.invoice_count||0).toLocaleString());
-
-  // Business Plan vs Achievement
+  // Aging
+  const aging=data.aging||{};
+  setText('aging-180',fmtCr(aging['>180 days']||0));
+  setText('aging-90',fmtCr(aging['>90 days']||0));
+  setText('aging-60',fmtCr(aging['>60 days']||0));
+  setText('aging-30',fmtCr(aging['>30 days']||0));
+  // Business Plan
   const planMT=parseFloat(q('col-plan-mt').value)||500;
-  const planSalesCr=parseFloat(q('col-plan-sales').value)||10;
+  const planCr=parseFloat(q('col-plan-sales').value)||10;
   const actMT=data.total_mt||0;
-  const actSalesCr=(data.total_invoiced||0)/1e7;
-  const mtPct=Math.min((actMT/planMT*100),200).toFixed(1);
-  const salesPct=Math.min((actSalesCr/planSalesCr*100),200).toFixed(1);
-  const mtGap=actMT-planMT; const salesGap=actSalesCr-planSalesCr;
-  const pctColor=pct=>parseFloat(pct)>=100?'var(--accent3)':parseFloat(pct)>=70?'var(--accent4)':'var(--danger)';
-
+  const actCr=(data.total_basic||0)/1e7;
+  const mtPct=Math.min(actMT/planMT*100,200).toFixed(1);
+  const salesPct=Math.min(actCr/planCr*100,200).toFixed(1);
   setText('col-plan-mt-disp',planMT.toLocaleString()+' MT');
   setText('col-act-mt-disp',fmtMT(actMT));
-  setText('col-mt-pct-badge',mtPct+'%');
-  q('col-mt-pct-badge').style.background=parseFloat(mtPct)>=100?'#ecfdf5':parseFloat(mtPct)>=70?'#fffbeb':'#fef2f2';
-  q('col-mt-pct-badge').style.color=pctColor(mtPct);
-  setText('col-mt-gap',(mtGap>=0?'+':'')+mtGap.toFixed(1)+' MT');
-  q('col-mt-gap').style.color=mtGap>=0?'var(--accent3)':'var(--danger)';
+  setText('col-mt-gap',((actMT-planMT)>=0?'+':'')+(actMT-planMT).toFixed(1)+' MT');
+  q('col-mt-gap').style.color=(actMT-planMT)>=0?'var(--accent3)':'var(--danger)';
   q('col-mt-bar').style.width=Math.min(parseFloat(mtPct),100)+'%';
-  setText('col-mt-bar-label',`${fmtMT(actMT)} of ${planMT.toLocaleString()} MT · ${mtPct}% achieved`);
-
-  setText('col-plan-sales-disp','₹'+planSalesCr.toFixed(2)+' Cr');
-  setText('col-act-sales-disp','₹'+actSalesCr.toFixed(2)+' Cr');
-  setText('col-sales-pct-badge',salesPct+'%');
-  q('col-sales-pct-badge').style.background=parseFloat(salesPct)>=100?'#eff6ff':parseFloat(salesPct)>=70?'#fffbeb':'#fef2f2';
-  q('col-sales-pct-badge').style.color=pctColor(salesPct);
-  setText('col-sales-gap',(salesGap>=0?'+':'')+salesGap.toFixed(2)+' Cr');
-  q('col-sales-gap').style.color=salesGap>=0?'var(--accent3)':'var(--danger)';
+  setText('col-mt-bar-label',`${fmtMT(actMT)} of ${planMT.toLocaleString()} MT · ${mtPct}%`);
+  setText('col-plan-sales-disp','₹'+planCr.toFixed(2)+' Cr');
+  setText('col-act-sales-disp','₹'+actCr.toFixed(2)+' Cr');
+  setText('col-sales-gap',((actCr-planCr)>=0?'+':'')+(actCr-planCr).toFixed(2)+' Cr');
+  q('col-sales-gap').style.color=(actCr-planCr)>=0?'var(--accent3)':'var(--danger)';
   q('col-sales-bar').style.width=Math.min(parseFloat(salesPct),100)+'%';
-  setText('col-sales-bar-label',`₹${actSalesCr.toFixed(2)} Cr of ₹${planSalesCr.toFixed(2)} Cr · ${salesPct}% achieved`);
-
-  // Trend Chart
-  const trend=data.trend||[];
-  if(colChartTrend){colChartTrend.destroy();colChartTrend=null;}
-  const ctx1=q('chart-col-trend').getContext('2d');
-  colChartTrend=new Chart(ctx1,{
-    type:'line',
-    data:{
-      labels:trend.map(t=>t.date),
-      datasets:[
-        {label:'Invoiced (₹ Cr)',data:trend.map(t=>+(t.invoiced/1e7).toFixed(2)),borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.35,pointRadius:3},
-        {label:'Overdue (₹ Cr)',data:trend.map(t=>+(t.overdue/1e7).toFixed(2)),borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.06)',fill:true,tension:.35,pointRadius:3}
-      ]
-    },
-    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
-      plugins:{legend:{position:'bottom',labels:{font:{family:"'DM Sans',sans-serif",size:11},boxWidth:10,padding:8}}},
-      scales:{x:{grid:{display:false},ticks:{font:{family:"'DM Sans',sans-serif",size:10},maxRotation:45}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:{family:"'DM Mono',monospace",size:10},callback:v=>'₹'+v+'Cr'}}}}
-  });
-
-  // Payment Terms chart
+  setText('col-sales-bar-label',`₹${actCr.toFixed(2)} Cr of ₹${planCr.toFixed(2)} Cr · ${salesPct}%`);
+  // Store trend data for re-rendering on toggle
+  window._colTrendData = data.trend||[];
+  renderColTrendChart(window._colTrendData);
   const terms=data.terms||[];
-  if(colChartTerms){colChartTerms.destroy();colChartTerms=null;}
-  const ctx2=q('chart-col-terms').getContext('2d');
-  colChartTerms=new Chart(ctx2,{
-    type:'doughnut',
-    data:{
-      labels:terms.map(t=>t.payment_terms||'Unknown'),
-      datasets:[{data:terms.map(t=>+((t.outstanding||0)/1e7).toFixed(2)),backgroundColor:COLORS.map(c=>c+'cc'),borderWidth:2,borderColor:'#fff'}]
-    },
-    options:{responsive:true,maintainAspectRatio:false,cutout:'60%',
-      plugins:{legend:{position:'bottom',labels:{font:{family:"'DM Sans',sans-serif",size:10},boxWidth:10,padding:6}},
-        tooltip:{callbacks:{label:ctx=>`${ctx.label}: ₹${ctx.raw} Cr`}}}}
-  });
-
+  mkChart('chart-col-terms',{type:'doughnut',data:{labels:terms.map(t=>t.payment_terms||'Unknown'),datasets:[{data:terms.map(t=>+((t.outstanding||0)/1e7).toFixed(2)),backgroundColor:COLORS.map(c=>c+'cc'),borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'60%',plugins:{legend:{position:'bottom',labels:{font:FONT,boxWidth:10,padding:6}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ₹${ctx.raw} Cr`}}}}});
   renderColTable(window._colData);
 }
 
+function renderColTrendChart(trend){
+  // Group daily data by week or month based on toggle
+  const grouped = {};
+  trend.forEach(t => {
+    let key;
+    if(colTrendGroup === 'month'){
+      key = t.date.substring(0,7); // YYYY-MM
+    } else if(colTrendGroup === 'week'){
+      // Get week label from date
+      const d = new Date(t.date);
+      const jan1 = new Date(d.getFullYear(),0,1);
+      const weekNum = Math.ceil(((d-jan1)/86400000 + jan1.getDay()+1)/7);
+      key = `W${weekNum} ${d.getFullYear()}`;
+    } else {
+      key = t.date; // daily - show as is
+    }
+    if(!grouped[key]) grouped[key]={invoiced:0,overdue:0};
+    grouped[key].invoiced += (t.invoiced||0);
+    grouped[key].overdue  += (t.overdue||0);
+  });
+
+  const labels = Object.keys(grouped);
+  const invoiced = labels.map(k=>+(grouped[k].invoiced/1e7).toFixed(2));
+  const overdue  = labels.map(k=>+(grouped[k].overdue/1e7).toFixed(2));
+  const pointR   = colTrendGroup==='day' && labels.length>60 ? 0 : 3;
+
+  mkChart('chart-col-trend',{type:'line',data:{labels,datasets:[
+    {label:'Invoiced (₹ Cr)',data:invoiced,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.08)',fill:true,tension:.35,pointRadius:pointR},
+    {label:'Overdue (₹ Cr)',data:overdue,borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,.06)',fill:true,tension:.35,pointRadius:pointR},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:FONT,boxWidth:10}}},scales:{x:{grid:{display:false},ticks:{font:FONT,maxRotation:45,maxTicksLimit:colTrendGroup==='day'?20:50}},y:{grid:{color:'rgba(0,0,0,.04)'},ticks:{font:FONT,callback:v=>'₹'+v+'Cr'}}}}});
+}
+
 function renderColTable(rows){
-  const toCr=v=>((v||0)/1e7).toFixed(2);
   let filtered=colView==='overdue'?rows.filter(r=>(r.overdue||0)>0):rows;
   q('col-cust-tbody').innerHTML=filtered.map((r,i)=>{
     const isOD=(r.overdue||0)>0;
     return `<tr>
       <td><span class="rank-badge" style="background:#f1f5f9;color:var(--muted)">${i+1}</span></td>
-      <td style="font-weight:700;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.customer||'—'}</td>
+      <td style="font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.customer||'—'}</td>
+      <td>${regionPill(r.region)}</td>
+      <td style="font-size:11px;color:var(--muted)">${r.salesperson||'—'}</td>
       <td style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace">${r.gst_no||'—'}</td>
-      <td class="text-end mono" style="color:var(--accent)">₹${toCr(r.invoiced)}</td>
-      <td class="text-end mono" style="color:var(--accent4)">₹${toCr(r.outstanding)}</td>
-      <td class="text-end mono" style="color:${isOD?'var(--danger)':'var(--muted)'}">
-        ${isOD?`<span style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:#dc2626">₹${toCr(r.overdue)} Cr</span>`:'—'}
-      </td>
-      <td><span style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;color:var(--muted2)">${r.payment_terms||'—'}</span></td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(r.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(r.invoiced||0)}</td>
+      <td class="text-end mono" style="color:var(--accent4)">${fmtCr(r.outstanding||0)}</td>
+      <td class="text-end">${isOD?`<span style="background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700;color:#dc2626">${fmtCr(r.overdue)}</span>`:'—'}</td>
+      <td><span style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 8px;font-size:11px;color:var(--muted2)">${r.payment_terms||'—'}</span></td>
       <td class="text-end"><span class="mt-badge">${fmtMT(r.mt_tons||0)}</span></td>
       <td class="text-end mono">${r.invoice_count||0}</td>
     </tr>`;
   }).join('');
 }
 
-/* ─── PLANTS ─── */
 async function loadPlants(){
   const pl=await apiFetch('/api/plant_breakdown'+buildQuery());
-  const totRev=pl.reduce((s,p)=>s+p.revenue,0)||1;
+  const totRev=pl.reduce((s,p)=>s+(p.basic||0),0)||1;
   q('plant-cards-row').innerHTML=pl.map(p=>{
-    const cls=`p${p.plant_code}`;const clr=PLANT_COLORS[p.plant_code]||'#64748b';
-    const pct=(p.revenue/totRev*100).toFixed(1);
-    return `<div class="col-xl-3 col-md-6">
-      <div class="kpi-card" style="border-top:3px solid ${clr}">
-        <div class="kpi-icon" style="background:${clr}22">🏭</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <div class="kpi-label">${p.plant_name}</div>
-          <span class="pbadge ${cls}">${p.plant_code}</span>
-        </div>
-        <div class="kpi-value" style="color:${clr}">${fmtRupee(p.revenue)}</div>
-        <div class="kpi-sub">MT: ${fmtMT(p.mt_tons)} · ${p.customers} customers</div>
-        <div class="prog-bar mt-2"><div class="prog-fill" style="width:${pct}%;background:${clr}"></div></div>
-        <div style="font-size:10px;color:var(--muted);margin-top:3px">${pct}% of total</div>
-      </div>
-    </div>`;
+    const clr=PLANT_COLORS[p.plant_code]||'#64748b';
+    const pct=((p.basic||0)/totRev*100).toFixed(1);
+    return `<div class="col-xl-3 col-md-6"><div class="kpi-card" style="border-top:3px solid ${clr}">
+      <div class="kpi-icon" style="background:${clr}22">🏭</div>
+      <div class="kpi-label">${p.plant_name} (${p.plant_code})</div>
+      <div class="kpi-value" style="color:${clr}">${fmtCr(p.basic||0)}</div>
+      <div class="kpi-sub">Revenue: ${fmtCr(p.revenue||0)}</div>
+      <div class="kpi-sub">MT: ${fmtMT(p.mt_tons)} · ${p.customers} customers</div>
+      <div class="prog-bar mt-2"><div class="prog-fill" style="width:${pct}%;background:${clr}"></div></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:3px">${pct}% of total</div>
+    </div></div>`;
   }).join('');
-  barChart('chart-plant-rev',pl.map(p=>p.plant_name||p.plant_code),[{label:'Revenue',data:pl.map(p=>p.revenue),colors:pl.map(p=>PLANT_COLORS[p.plant_code]||'#94a3b8')}]);
-  barChart('chart-plant-mt',pl.map(p=>p.plant_name||p.plant_code),[{label:'MT Tons',data:pl.map(p=>p.mt_tons),colors:pl.map(p=>(PLANT_COLORS[p.plant_code]||'#94a3b8')+'99')}]);
+  barChart('chart-plant-rev',pl.map(p=>p.plant_name||p.plant_code),[{label:'Basic Price',data:pl.map(p=>p.basic||0),colors:pl.map(p=>PLANT_COLORS[p.plant_code]||'#94a3b8')}]);
+  mkChart('chart-plant-mt',{type:'bar',data:{labels:pl.map(p=>p.plant_name||p.plant_code),datasets:[{label:'MT Tons',data:pl.map(p=>p.mt_tons||0),backgroundColor:pl.map(p=>(PLANT_COLORS[p.plant_code]||'#94a3b8')+'99'),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`MT: ${fmtMT(ctx.raw)}`}}}}});
 }
 
-/* ─── SALESPERSON ─── */
 async function loadSalesperson(){
-  const [spData,weekData]=await Promise.all([
-    apiFetch('/api/salesperson_breakdown'+buildQuery()),
-    apiFetch('/api/salesperson_weekly'+buildQuery()),
-  ]);
+  const [spData,weekData]=await Promise.all([apiFetch('/api/salesperson_breakdown'+buildQuery()),apiFetch('/api/salesperson_weekly'+buildQuery())]);
   _spData=spData;_weeklyData=weekData;
-
-  renderPlanTable();
-  renderHeadSummary();
-  renderHeadCharts();
-  renderSPCards();
-  renderSPTable();
+  renderPlanTable();renderHeadSummary();renderHeadCharts();renderSPCards();renderSPTable();
 }
 
-/* Individual plan table */
 function renderPlanTable(){
-  const tbody=q('sp-plan-tbody');
-  tbody.innerHTML=REAL_SALESPERSONS.map((sp,i)=>{
-    const data=_spData.find(s=>s.salesperson===sp)||{revenue:0,mt_tons:0,transactions:0,qty:0};
+  q('sp-plan-tbody').innerHTML=REAL_SALESPERSONS.map((sp,i)=>{
+    const d=_spData.find(s=>s.salesperson===sp)||{basic:0,revenue:0,mt_tons:0,transactions:0,customers:0};
     const tgt=SP_INDIVIDUAL_TARGETS[sp];
-    const tgtRev=tgt.rev*1e5;
-    const tgtMT=tgt.mt;
-    const revPct=tgtRev>0?(data.revenue/tgtRev*100):0;
-    const mtPct=tgtMT>0?(data.mt_tons/tgtMT*100):0;
+    const tgtRev=tgt.rev*1e5;const tgtMT=tgt.mt;
+    const revPct=tgtRev>0?((d.basic||0)/tgtRev*100):0;
+    const mtPct=tgtMT>0?((d.mt_tons||0)/tgtMT*100):0;
     const cls=revPct>=100?'pct-hit':revPct>=75?'pct-close':'pct-miss';
-    const mtCls=mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss';
     const barW=Math.min(revPct,100).toFixed(0);
     const barCol=revPct>=100?'#059669':revPct>=75?'#d97706':'#dc2626';
     return `<tr>
-      <td style="font-weight:700;color:var(--muted);font-size:12px">${i+1}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:30px;height:30px;border-radius:8px;background:${SP_BG[i]};display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:800;flex-shrink:0">${SP_EMO[i]}</div>
-          <span style="font-weight:700">${sp}</span>
-        </div>
-      </td>
-      <td class="text-end">
-        <input type="number" class="plan-input" id="plan-rev-${sp.replace(/\s/g,'_')}" value="${tgt.rev}" min="0" step="5"
-          onchange="updateIndividualTarget('${sp}','rev',this.value)"/>
-      </td>
-      <td class="text-end">
-        <input type="number" class="plan-input" id="plan-mt-${sp.replace(/\s/g,'_')}" value="${tgt.mt}" min="0" step="50"
-          onchange="updateIndividualTarget('${sp}','mt',this.value)"/>
-      </td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(data.revenue)}</td>
-      <td class="text-end"><span class="mt-badge">${fmtMT(data.mt_tons)}</span></td>
+      <td style="font-weight:700;color:var(--muted)">${i+1}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div style="width:30px;height:30px;border-radius:8px;background:${SP_BG[i]};display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff">${SP_EMO[i]}</div><b>${sp}</b></div></td>
+      <td>${regionPill(SP_REGION[sp])}</td>
+      <td class="text-end"><input type="number" class="plan-input" value="${tgt.rev}" min="0" step="5" onchange="updateIndividualTarget('${sp}','rev',this.value)"/></td>
+      <td class="text-end"><input type="number" class="plan-input" value="${tgt.mt}" min="0" step="50" onchange="updateIndividualTarget('${sp}','mt',this.value)"/></td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(d.basic||0)}</td>
+      <td class="text-end"><span class="mt-badge">${fmtMT(d.mt_tons)}</span></td>
       <td class="text-end"><span class="${cls}">${revPct.toFixed(1)}%</span></td>
-      <td class="text-end"><span class="${mtCls}">${mtPct.toFixed(1)}%</span></td>
-      <td style="min-width:130px">
-        <div style="display:flex;align-items:center;gap:6px">
-          <div class="prog-bar" style="width:90px;height:6px"><div class="prog-fill" style="width:${barW}%;background:${barCol}"></div></div>
-          <span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted)">${revPct.toFixed(0)}%</span>
-        </div>
-      </td>
+      <td class="text-end"><span class="${mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss'}">${mtPct.toFixed(1)}%</span></td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="prog-bar" style="width:90px;height:6px"><div class="prog-fill" style="width:${barW}%;background:${barCol}"></div></div><span style="font-size:10px;font-family:'DM Mono',monospace;color:var(--muted)">${revPct.toFixed(0)}%</span></div></td>
     </tr>`;
   }).join('');
 }
 
-function updateIndividualTarget(sp,field,val){
-  if(!SP_INDIVIDUAL_TARGETS[sp]) SP_INDIVIDUAL_TARGETS[sp]={rev:50,mt:1000};
-  SP_INDIVIDUAL_TARGETS[sp][field]=parseFloat(val)||0;
-  renderPlanTable();
-  renderHeadSummary();
-  renderSPCards();
-  renderSPTable();
-}
-
-function syncDefaultTargets(){
-  const def=parseFloat(q('sp-target-input').value)||50;
-  REAL_SALESPERSONS.forEach(sp=>{ SP_INDIVIDUAL_TARGETS[sp].rev=def; });
-}
-function syncDefaultMTTargets(){
-  const def=parseFloat(q('mt-target-input').value)||1000;
-  REAL_SALESPERSONS.forEach(sp=>{ SP_INDIVIDUAL_TARGETS[sp].mt=def; });
-}
-function applyTargets(){
-  syncDefaultTargets();syncDefaultMTTargets();
-  HEAD_TARGET_LAKHS=parseFloat(q('head-target-input').value)||500;
-  renderPlanTable();renderHeadSummary();renderSPCards();renderSPTable();
-  toast('Targets updated & recalculated!');
-}
+function updateIndividualTarget(sp,field,val){SP_INDIVIDUAL_TARGETS[sp][field]=parseFloat(val)||0;renderPlanTable();renderHeadSummary();renderSPCards();renderSPTable();}
+function syncDefaultTargets(){const def=parseFloat(q('sp-target-input').value)||50;REAL_SALESPERSONS.forEach(sp=>{SP_INDIVIDUAL_TARGETS[sp].rev=def;});}
+function syncDefaultMTTargets(){const def=parseFloat(q('mt-target-input').value)||1000;REAL_SALESPERSONS.forEach(sp=>{SP_INDIVIDUAL_TARGETS[sp].mt=def;});}
+function applyTargets(){syncDefaultTargets();syncDefaultMTTargets();renderPlanTable();renderHeadSummary();renderSPCards();renderSPTable();toast('Targets updated!');}
 
 function renderHeadSummary(){
-  const totalRev=_spData.reduce((s,r)=>s+r.revenue,0);
-  const totalMT=_spData.reduce((s,r)=>s+r.mt_tons,0);
-  const totalTxns=_spData.reduce((s,r)=>s+r.transactions,0);
-  const tgtRev=HEAD_TARGET_LAKHS*1e5;
+  const totalBasic=_spData.reduce((s,r)=>s+(r.basic||0),0);
+  const totalRev=_spData.reduce((s,r)=>s+(r.revenue||0),0);
+  const totalMT=_spData.reduce((s,r)=>s+(r.mt_tons||0),0);
+  const tgtRev=REAL_SALESPERSONS.reduce((s,sp)=>s+(SP_INDIVIDUAL_TARGETS[sp]?.rev||0),0)*1e5;
   const tgtMT=REAL_SALESPERSONS.reduce((s,sp)=>s+(SP_INDIVIDUAL_TARGETS[sp]?.mt||0),0);
-  const revPct=tgtRev>0?(totalRev/tgtRev*100):0;
+  const revPct=tgtRev>0?(totalBasic/tgtRev*100):0;
   const mtPct=tgtMT>0?(totalMT/tgtMT*100):0;
-  const gap=totalRev-tgtRev;
   const cls=revPct>=100?'pct-hit':revPct>=75?'pct-close':'pct-miss';
-  const mtCls=mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss';
-  q('head-actual-val').textContent=fmtRupee(totalRev);
-  q('head-target-val').textContent=fmtRupee(tgtRev);
+  setText('head-actual-val',fmtCr(totalBasic));
+  setText('head-revenue-val',fmtCr(totalRev));
+  setText('head-target-val',fmtCr(tgtRev));
   q('head-pct').textContent=revPct.toFixed(1)+'%';q('head-pct').className='head-big '+cls;
-  q('head-mt-val').textContent=fmtMT(totalMT);
-  q('head-mt-target').textContent=fmtMT(tgtMT);
-  q('head-mt-pct').textContent=mtPct.toFixed(1)+'%';q('head-mt-pct').className='head-big '+mtCls;
-  q('head-gap').textContent=fmtRupee(Math.abs(gap));q('head-gap').style.color=gap>=0?'#059669':'#dc2626';
-  q('head-txns').textContent=totalTxns.toLocaleString();
+  setText('head-mt-val',fmtMT(totalMT));
+  setText('head-mt-target',fmtMT(tgtMT));
+  q('head-mt-pct').textContent=mtPct.toFixed(1)+'%';q('head-mt-pct').className='head-big '+(mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss');
   const fill=Math.min(revPct,100).toFixed(0);
-  const fillEl=q('head-prog-fill');
-  fillEl.style.width=fill+'%';
+  const fillEl=q('head-prog-fill');fillEl.style.width=fill+'%';
   fillEl.style.background=revPct>=100?'linear-gradient(90deg,#059669,#34d399)':revPct>=75?'linear-gradient(90deg,#d97706,#fbbf24)':'linear-gradient(90deg,#dc2626,#f87171)';
 }
 
 function renderHeadCharts(){
-  if(!_weeklyData) return;
+  if(!_weeklyData)return;
   const weeks=_weeklyData.weeks||[];
   const allRows=_weeklyData.data||[];
   const wkRevMap={};const wkMTMap={};
-  allRows.forEach(r=>{wkRevMap[r.week]=(wkRevMap[r.week]||0)+r.revenue;wkMTMap[r.week]=(wkMTMap[r.week]||0)+r.mt_tons;});
-  const wkRevs=weeks.map(w=>wkRevMap[w]||0);
-  const wkMTs=weeks.map(w=>wkMTMap[w]||0);
-  const wkTgt=HEAD_TARGET_LAKHS*1e5*0.23;
+  allRows.forEach(r=>{wkRevMap[r.week]=(wkRevMap[r.week]||0)+(r.basic||0);wkMTMap[r.week]=(wkMTMap[r.week]||0)+(r.mt_tons||0);});
+  const totalTgtRev=REAL_SALESPERSONS.reduce((s,sp)=>s+(SP_INDIVIDUAL_TARGETS[sp]?.rev||0),0)*1e5;
+  const wkTgt=totalTgtRev*0.23;
   const wkMTTgt=REAL_SALESPERSONS.reduce((s,sp)=>s+(SP_INDIVIDUAL_TARGETS[sp]?.mt||0),0)*0.23;
-  makeChart('chart-head-weekly',{type:'bar',data:{labels:weeks,datasets:[
-    {label:'Team Revenue',data:wkRevs,backgroundColor:'#2563eb99',borderRadius:4,order:2},
+  mkChart('chart-head-weekly',{type:'bar',data:{labels:weeks,datasets:[
+    {label:'Basic Price',data:weeks.map(w=>wkRevMap[w]||0),backgroundColor:'#05996999',borderRadius:4,order:2},
     {label:'Target',data:weeks.map(()=>wkTgt),type:'line',borderColor:'#dc2626',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
-  ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtK(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-  makeChart('chart-head-mt-weekly',{type:'bar',data:{labels:weeks,datasets:[
-    {label:'MT Tons',data:wkMTs,backgroundColor:'#ea580c99',borderRadius:4,order:2},
-    {label:'MT Target',data:weeks.map(()=>wkMTTgt),type:'line',borderColor:'#7c3aed',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
-  ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
+  ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}}}});
+  mkChart('chart-head-mt-weekly',{type:'bar',data:{labels:weeks,datasets:[
+    {label:'MT Tons',data:weeks.map(w=>wkMTMap[w]||0),backgroundColor:'#ea580c99',borderRadius:4,order:2},
+    {label:'Target',data:weeks.map(()=>wkMTTgt),type:'line',borderColor:'#7c3aed',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
+  ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtMT(ctx.raw)}`}}}}});
 }
 
 function renderSPCards(){
   q('sp-cards-grid').innerHTML=REAL_SALESPERSONS.map((sp,i)=>{
-    const d=_spData.find(s=>s.salesperson===sp)||{revenue:0,mt_tons:0,transactions:0,qty:0};
+    const d=_spData.find(s=>s.salesperson===sp)||{basic:0,revenue:0,mt_tons:0,transactions:0,customers:0};
     const tgt=SP_INDIVIDUAL_TARGETS[sp];
-    const tgtRev=tgt.rev*1e5; const tgtMT=tgt.mt;
-    const revPct=tgtRev>0?(d.revenue/tgtRev*100):0;
-    const mtPct=tgtMT>0?(d.mt_tons/tgtMT*100):0;
+    const tgtRev=tgt.rev*1e5;const tgtMT=tgt.mt;
+    const revPct=tgtRev>0?((d.basic||0)/tgtRev*100):0;
+    const mtPct=tgtMT>0?((d.mt_tons||0)/tgtMT*100):0;
     const cls=revPct>=100?'pct-hit':revPct>=75?'pct-close':'pct-miss';
     const fillCol=revPct>=100?'#059669':revPct>=75?'#d97706':'#dc2626';
-    const sel=_selectedSP===sp?'sp-selected':'';
-    return `<div class="sp-card ${sel}" onclick="openSPDetail('${sp}',${i})">
+    return `<div class="sp-card ${_selectedSP===sp?'sp-selected':''}" onclick="openSPDetail('${sp}',${i})">
       <div class="sp-card-header">
         <div class="sp-avatar" style="background:${SP_BG[i]}">${SP_EMO[i]}</div>
         <div class="flex-grow-1">
           <div class="sp-name">${sp}</div>
-          <div class="sp-subtitle">${d.transactions} orders · <span class="mt-badge">${fmtMTshort(d.mt_tons)}</span></div>
+          <div class="sp-subtitle">${regionPill(SP_REGION[sp])} · ${d.customers||0} customers · ${d.transactions||0} orders</div>
         </div>
       </div>
       <div class="sp-card-stats">
-        <div class="sp-stat-box"><div class="sp-stat-label">Revenue</div><div class="sp-stat-val" style="color:var(--accent)">${fmtRupee(d.revenue)}</div></div>
-        <div class="sp-stat-box"><div class="sp-stat-label">Rev Target</div><div class="sp-stat-val" style="color:var(--muted)">${fmtRupee(tgtRev)}</div></div>
-        <div class="sp-stat-box"><div class="sp-stat-label">MT Tons</div><div class="sp-stat-val" style="color:var(--orange)">${fmtMTshort(d.mt_tons)}</div></div>
+        <div class="sp-stat-box"><div class="sp-stat-label">Basic Price</div><div class="sp-stat-val" style="color:var(--accent3)">${fmtCr(d.basic||0)}</div></div>
+        <div class="sp-stat-box"><div class="sp-stat-label">Target</div><div class="sp-stat-val" style="color:var(--muted)">${fmtCr(tgtRev)}</div></div>
+        <div class="sp-stat-box"><div class="sp-stat-label">MT Tons</div><div class="sp-stat-val" style="color:var(--orange)">${fmtMT(d.mt_tons)}</div></div>
       </div>
       <div class="sp-card-tva">
-        <div class="sp-tva-label">
-          <span style="font-size:10px;color:var(--muted);font-weight:700">Revenue Achievement</span>
-          <span class="${cls}">${revPct.toFixed(1)}%</span>
-        </div>
+        <div class="sp-tva-label"><span style="font-size:10px;color:var(--muted);font-weight:700">Achievement (Basic Price)</span><span class="${cls}">${revPct.toFixed(1)}%</span></div>
         <div class="sp-tva-track"><div class="sp-tva-fill" style="width:${Math.min(revPct,100).toFixed(0)}%;background:${fillCol}"></div></div>
         <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--muted)">
           <span>MT: ${mtPct.toFixed(1)}% of ${fmtMT(tgtMT)}</span>
-          <span>Gap: ${fmtRupee(Math.abs(d.revenue-tgtRev))}</span>
+          <span>Overdue: ${fmtCr(d.overdue||0)}</span>
         </div>
       </div>
     </div>`;
@@ -1751,40 +1089,30 @@ function renderSPCards(){
 
 function renderSPTable(){
   q('sp-table-tbody').innerHTML=REAL_SALESPERSONS.map((sp,i)=>{
-    const d=_spData.find(s=>s.salesperson===sp)||{revenue:0,mt_tons:0,transactions:0,qty:0};
+    const d=_spData.find(s=>s.salesperson===sp)||{basic:0,revenue:0,mt_tons:0,transactions:0,customers:0};
     const tgt=SP_INDIVIDUAL_TARGETS[sp];
     const tgtRev=tgt.rev*1e5;const tgtMT=tgt.mt;
-    const revPct=tgtRev>0?(d.revenue/tgtRev*100):0;
-    const mtPct=tgtMT>0?(d.mt_tons/tgtMT*100):0;
-    const gap=d.revenue-tgtRev;
+    const revPct=tgtRev>0?((d.basic||0)/tgtRev*100):0;
+    const mtPct=tgtMT>0?((d.mt_tons||0)/tgtMT*100):0;
     const cls=revPct>=100?'pct-hit':revPct>=75?'pct-close':'pct-miss';
-    const barCol=revPct>=100?'#059669':revPct>=75?'#d97706':'#dc2626';
     return `<tr onclick="openSPDetail('${sp}',${i})">
       <td><span class="rank-badge" style="background:${SP_BG[i]+'22'};color:${SP_BG[i]}">${i+1}</span></td>
       <td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:7px;background:${SP_BG[i]};display:flex;align-items:center;justify-content:center;font-size:13px">${SP_EMO[i]}</div><b>${sp}</b></div></td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(d.revenue)}</td>
-      <td class="text-end mono" style="color:var(--muted)">${fmtRupee(tgtRev)}</td>
+      <td>${regionPill(SP_REGION[sp])}</td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(d.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(d.revenue||0)}</td>
+      <td class="text-end mono" style="color:var(--muted)">${fmtCr(tgtRev)}</td>
       <td class="text-end"><b class="${cls}">${revPct.toFixed(1)}%</b></td>
       <td class="text-end"><span class="mt-badge">${fmtMT(d.mt_tons)}</span></td>
-      <td class="text-end mono" style="color:var(--muted)">${fmtMT(tgtMT)}</td>
+      <td class="text-end mono">${fmtMT(tgtMT)}</td>
       <td class="text-end"><b class="${mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss'}">${mtPct.toFixed(1)}%</b></td>
-      <td class="text-end mono" style="color:${gap>=0?'var(--accent3)':'var(--danger)'}">${gap>=0?'+':''}${fmtRupee(Math.abs(gap))}</td>
-      <td class="text-end mono" style="color:var(--muted)">${d.transactions}</td>
-      <td style="min-width:120px"><div style="display:flex;align-items:center;gap:5px">
-        <div class="mini-bar" style="width:70px"><div class="mini-bar-fill" style="width:${Math.min(revPct,100).toFixed(0)}%;background:${barCol}"></div></div>
-        <div class="mini-bar" style="width:40px;background:#fff7ed;border-color:#fed7aa"><div class="mini-bar-fill" style="width:${Math.min(mtPct,100).toFixed(0)}%;background:#ea580c"></div></div>
-      </div></td>
+      <td class="text-end mono">${d.customers||0}</td>
+      <td class="text-end mono">${d.transactions||0}</td>
     </tr>`;
   }).join('');
 }
 
-function setSPView(v){
-  _spView=v;
-  q('sp-cards-view').style.display=v==='cards'?'block':'none';
-  q('sp-table-view').style.display=v==='table'?'block':'none';
-  q('view-cards-btn').classList.toggle('active-grp',v==='cards');
-  q('view-table-btn').classList.toggle('active-grp',v==='table');
-}
+function setSPView(v){_spView=v;q('sp-cards-view').style.display=v==='cards'?'block':'none';q('sp-table-view').style.display=v==='table'?'block':'none';q('view-cards-btn').classList.toggle('active-grp',v==='cards');q('view-table-btn').classList.toggle('active-grp',v==='table');}
 
 async function openSPDetail(sp,idx){
   try{
@@ -1795,101 +1123,168 @@ async function openSPDetail(sp,idx){
     panel.scrollIntoView({behavior:'smooth',block:'start'});
     q('sp-detail-avatar').style.background=color;q('sp-detail-avatar').textContent=SP_EMO[idx];
     q('sp-detail-name').textContent=sp;q('sp-detail-sub').textContent='Loading…';
-
     const d=await apiFetch('/api/salesperson_detail'+buildQuery({salesperson:sp}));
     const tgt=SP_INDIVIDUAL_TARGETS[sp];
     const tgtRev=tgt.rev*1e5;const tgtMT=tgt.mt;
-    const revPct=tgtRev>0?(d.total_revenue/tgtRev*100):0;
-    const mtPct=tgtMT>0?(d.total_mt_tons/tgtMT*100):0;
+    const revPct=tgtRev>0?((d.total_basic||0)/tgtRev*100):0;
+    const mtPct=tgtMT>0?((d.total_mt_tons||0)/tgtMT*100):0;
     const cls=revPct>=100?'pct-hit':revPct>=75?'pct-close':'pct-miss';
-
-    q('sp-detail-sub').textContent=`${d.transactions} orders · MT: ${fmtMT(d.total_mt_tons)} · ${revPct.toFixed(1)}% of target`;
-    q('spd-revenue').textContent=fmtRupee(d.total_revenue);
-    q('spd-target').textContent=fmtRupee(tgtRev);
+    q('sp-detail-sub').textContent=`${SP_REGION[sp]} Region · ${d.transactions} orders · ${revPct.toFixed(1)}% of target`;
+    setText('spd-basic',fmtCr(d.total_basic||0));
+    setText('spd-revenue',fmtCr(d.total_revenue||0));
+    setText('spd-target',fmtCr(tgtRev));
     q('spd-pct').textContent=revPct.toFixed(1)+'%';q('spd-pct').className='sp-mini-kpi-val '+cls;
-    q('spd-mt').textContent=fmtMT(d.total_mt_tons);
-    q('spd-mt-target').textContent=fmtMT(tgtMT);
+    setText('spd-mt',fmtMT(d.total_mt_tons));
     q('spd-mt-pct').textContent=mtPct.toFixed(1)+'%';q('spd-mt-pct').className='sp-mini-kpi-val '+(mtPct>=100?'pct-hit':mtPct>=75?'pct-close':'pct-miss');
-
-    const progFill=q('spd-prog');progFill.style.width=Math.min(revPct,100).toFixed(0)+'%';
+    const progFill=q('spd-prog');progFill.style.width=Math.min(revPct,100)+'%';
     progFill.style.background=revPct>=100?'linear-gradient(90deg,#059669,#34d399)':revPct>=75?'linear-gradient(90deg,#d97706,#fbbf24)':'linear-gradient(90deg,#dc2626,#f87171)';
-    q('spd-mt-prog').style.width=Math.min(mtPct,100).toFixed(0)+'%';
-
-    lineArea('chart-spd-monthly',d.monthly.map(m=>m.year_month),[{label:'Revenue',data:d.monthly.map(m=>m.revenue),color}]);
-    barChart('chart-spd-mt-monthly',d.monthly.map(m=>m.year_month),[{label:'MT Tons',data:d.monthly.map(m=>m.mt_tons),color:'#ea580c'}]);
-
+    q('spd-mt-prog').style.width=Math.min(mtPct,100)+'%';
+    mkChart('chart-spd-monthly',{type:'bar',data:{labels:d.monthly.map(m=>m.year_month),datasets:[{label:'Basic Price',data:d.monthly.map(m=>m.basic||0),backgroundColor:color+'99',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`Basic: ${fmtCr(ctx.raw)}`}}}}});
+    mkChart('chart-spd-mt-monthly',{type:'bar',data:{labels:d.monthly.map(m=>m.year_month),datasets:[{label:'MT Tons',data:d.monthly.map(m=>m.mt_tons||0),backgroundColor:'#ea580c99',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`MT: ${fmtMT(ctx.raw)}`}}}}});
     const wkRevTgt=tgt.rev*1e5*0.23;const wkMTTgt=tgt.mt*0.23;
-    makeChart('chart-spd-weekly',{type:'bar',data:{labels:d.weekly.map(w=>w.week),datasets:[
-      {label:'Revenue',data:d.weekly.map(w=>w.revenue),backgroundColor:color+'bb',borderRadius:5,order:2},
+    mkChart('chart-spd-weekly',{type:'bar',data:{labels:d.weekly.map(w=>w.week),datasets:[
+      {label:'Basic Price',data:d.weekly.map(w=>w.basic||0),backgroundColor:color+'bb',borderRadius:5,order:2},
       {label:'Target',data:d.weekly.map(()=>wkRevTgt),type:'line',borderColor:'#dc2626',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
-    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtK(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-    makeChart('chart-spd-mt-weekly',{type:'bar',data:{labels:d.weekly.map(w=>w.week),datasets:[
-      {label:'MT Tons',data:d.weekly.map(w=>w.mt_tons),backgroundColor:'#ea580cbb',borderRadius:5,order:2},
-      {label:'MT Target',data:d.weekly.map(()=>wkMTTgt),type:'line',borderColor:'#7c3aed',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
-    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-
+    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtCr(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtCr(ctx.raw)}`}}}}});
+    mkChart('chart-spd-mt-weekly',{type:'bar',data:{labels:d.weekly.map(w=>w.week),datasets:[
+      {label:'MT Tons',data:d.weekly.map(w=>w.mt_tons||0),backgroundColor:'#ea580cbb',borderRadius:5,order:2},
+      {label:'Target',data:d.weekly.map(()=>wkMTTgt),type:'line',borderColor:'#7c3aed',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:0,order:1},
+    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmtMT(ctx.raw)}`}}}}});
+    const custs=d.customers||[];
+    q('spd-cust-tbody').innerHTML=custs.slice(0,30).map((c,i)=>`<tr>
+      <td><span class="rank-badge" style="background:#f1f5f9;color:var(--muted)">${i+1}</span></td>
+      <td style="font-weight:600">${escH(c.customer)}</td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(c.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(c.revenue||0)}</td>
+      <td class="text-end"><span class="mt-badge">${fmtMT(c.mt_tons)}</span></td>
+      <td class="text-end mono" style="color:var(--danger)">${fmtCr(c.overdue||0)}</td>
+      <td class="text-end mono">${c.transactions}</td>
+    </tr>`).join('');
     q('spd-week-tbody').innerHTML=d.weekly.map(w=>{
-      const rp=wkRevTgt>0?(w.revenue/wkRevTgt*100):0;const mp=wkMTTgt>0?((w.mt_tons||0)/wkMTTgt*100):0;
-      const rc=rp>=100?'var(--accent3)':rp>=75?'var(--accent4)':'var(--danger)';
-      const mc=mp>=100?'var(--accent3)':mp>=75?'var(--accent4)':'var(--orange)';
+      const rp=wkRevTgt>0?((w.basic||0)/wkRevTgt*100):0;
+      const mp=wkMTTgt>0?((w.mt_tons||0)/wkMTTgt*100):0;
       return `<tr>
         <td style="font-weight:700">${w.week}</td>
-        <td class="text-end mono" style="color:var(--accent)">${fmtRupee(w.revenue)}</td>
-        <td class="text-end mono" style="color:var(--muted)">${fmtRupee(wkRevTgt)}</td>
-        <td class="text-end"><b style="color:${rc};font-family:'DM Mono',monospace">${rp.toFixed(1)}%</b></td>
+        <td class="text-end mono" style="color:var(--accent3)">${fmtCr(w.basic||0)}</td>
+        <td class="text-end mono" style="color:var(--accent)">${fmtCr(w.revenue||0)}</td>
+        <td class="text-end mono" style="color:var(--muted)">${fmtCr(wkRevTgt)}</td>
+        <td class="text-end"><b style="color:${pctColor(rp)};font-family:'DM Mono',monospace">${rp.toFixed(1)}%</b></td>
         <td class="text-end"><span class="mt-badge">${fmtMT(w.mt_tons||0)}</span></td>
-        <td class="text-end mono" style="color:var(--muted)">${fmtMT(wkMTTgt)}</td>
-        <td class="text-end"><b style="color:${mc};font-family:'DM Mono',monospace">${mp.toFixed(1)}%</b></td>
-        <td class="text-end mono" style="color:var(--muted)">${fmtQty(w.qty)}</td>
-        <td class="text-end mono" style="color:var(--muted)">${w.transactions}</td>
-        <td><div style="display:flex;gap:4px;align-items:center">
-          <div class="mini-bar"><div class="mini-bar-fill" style="width:${Math.min(rp,100).toFixed(0)}%;background:${rc}"></div></div>
-          <div class="mini-bar" style="background:#fff7ed;border-color:#fed7aa"><div class="mini-bar-fill" style="width:${Math.min(mp,100).toFixed(0)}%;background:#ea580c"></div></div>
-        </div></td>
+        <td class="text-end mono">${fmtMT(wkMTTgt)}</td>
+        <td class="text-end"><b style="color:${pctColor(mp)};font-family:'DM Mono',monospace">${mp.toFixed(1)}%</b></td>
+        <td class="text-end mono">${w.transactions||0}</td>
       </tr>`;
     }).join('');
-
-    if(d.plant_split.length>0) doughnutChart('chart-spd-plant',d.plant_split.map(p=>p.plant_name||p.plant_code),d.plant_split.map(p=>p.revenue));
-    doughnutChart('chart-spd-cat',d.cat_split.map(c=>c.category),d.cat_split.map(c=>c.revenue));
-    makeChart('chart-spd-yearly',{type:'bar',data:{labels:d.yearly.map(y=>String(y.year)),datasets:[
-      {label:'Revenue',data:d.yearly.map(y=>y.revenue),backgroundColor:COLORS.slice(0,d.yearly.length).map(c=>c+'cc'),borderRadius:6,yAxisID:'y'},
-      {label:'MT Tons',data:d.yearly.map(y=>y.mt_tons),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,yAxisID:'y2'},
-    ]},options:{responsive:true,maintainAspectRatio:true,
-      scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtK(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>v.toFixed(0)+' MT'},grid:{drawOnChartArea:false}}},
-      plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
-  }catch(e){toast('SP detail error: '+e.message,'#dc2626');}
+    if(d.plant_split?.length>0) doughnutChart('chart-spd-plant',d.plant_split.map(p=>p.plant_name||p.plant_code),d.plant_split.map(p=>p.basic||0));
+    doughnutChart('chart-spd-cat',d.cat_split.map(c=>c.category),d.cat_split.map(c=>c.basic||0));
+    mkChart('chart-spd-yearly',{type:'bar',data:{labels:d.yearly.map(y=>String(y.year)),datasets:[
+      {label:'Basic Price',data:d.yearly.map(y=>y.basic||0),backgroundColor:COLORS.slice(0,d.yearly.length).map(c=>c+'cc'),borderRadius:6,yAxisID:'y'},
+      {label:'MT Tons',data:d.yearly.map(y=>y.mt_tons||0),type:'line',borderColor:'#ea580c',backgroundColor:'transparent',borderWidth:2.5,pointRadius:4,yAxisID:'y2'},
+    ]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,position:'left',ticks:{...gridP.ticks,callback:v=>fmtCr(v)}},y2:{...gridP,position:'right',ticks:{...gridP.ticks,callback:v=>fmtMT(v)},grid:{drawOnChartArea:false}}},plugins:{legend:{labels:{font:FONT,boxWidth:10}}}}});
+  }catch(e){toast('Error: '+e.message,'#dc2626');}
 }
 function closeSPDetail(){q('sp-detail-panel').style.display='none';_selectedSP=null;document.querySelectorAll('.sp-card').forEach(c=>c.classList.remove('sp-selected'));}
 
-/* ─── YEARLY ─── */
 async function loadYearly(){
   const yr=await apiFetch('/api/yearly_summary');
-  barChart('chart-yr-rev',yr.map(y=>String(y.year)),[{label:'Revenue',data:yr.map(y=>y.revenue),colors:COLORS.slice(0,yr.length).map(c=>c+'cc')}]);
-  barChart('chart-yr-mt',yr.map(y=>String(y.year)),[{label:'MT Tons',data:yr.map(y=>y.mt_tons),colors:yr.map((_,i)=>COLORS[i]+'aa')}]);
+  barChart('chart-yr-rev',yr.map(y=>String(y.year)),[{label:'Basic Price',data:yr.map(y=>y.basic||0),colors:COLORS.slice(0,yr.length).map(c=>c+'cc')}]);
+  mkChart('chart-yr-mt',{type:'bar',data:{labels:yr.map(y=>String(y.year)),datasets:[{label:'MT Tons',data:yr.map(y=>y.mt_tons||0),backgroundColor:yr.map((_,i)=>COLORS[i]+'aa'),borderRadius:5}]},options:{responsive:true,maintainAspectRatio:true,scales:{x:gridP,y:{...gridP,ticks:{...gridP.ticks,callback:v=>fmtMT(v)}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`MT: ${fmtMT(ctx.raw)}`}}}}});
   q('yr-tbody').innerHTML=yr.map((y,i)=>{
-    const prev=yr[i-1];const yoy=prev&&prev.revenue>0?((y.revenue-prev.revenue)/prev.revenue*100):null;
+    const prev=yr[i-1];const yoy=prev&&(prev.basic||0)>0?(((y.basic||0)-(prev.basic||0))/(prev.basic||0)*100):null;
     const yoyH=yoy===null?'<span style="color:var(--muted2)">—</span>':`<span style="color:${yoy>=0?'var(--accent3)':'var(--danger)'};font-weight:800">${yoy>=0?'+':''}${yoy.toFixed(1)}%</span>`;
-    return `<tr class="yr-${y.year}"><td style="font-weight:800;font-size:15px">${y.year}</td>
-      <td class="text-end mono" style="color:var(--accent)">${fmtRupee(y.revenue)}</td>
+    return `<tr class="yr-${y.year}">
+      <td style="font-weight:800;font-size:15px">${y.year}</td>
+      <td class="text-end mono" style="color:var(--accent3)">${fmtCr(y.basic||0)}</td>
+      <td class="text-end mono" style="color:var(--accent)">${fmtCr(y.revenue||0)}</td>
       <td class="text-end"><span class="mt-badge">${fmtMT(y.mt_tons)}</span></td>
       <td class="text-end mono">${fmtQty(y.qty)}</td>
-      <td class="text-end mono">${y.transactions.toLocaleString()}</td>
-      <td class="text-end mono">${y.customers.toLocaleString()}</td>
-      <td class="text-end">${yoyH}</td></tr>`;
+      <td class="text-end mono">${(y.transactions||0).toLocaleString()}</td>
+      <td class="text-end mono">${(y.customers||0).toLocaleString()}</td>
+      <td class="text-end">${yoyH}</td>
+    </tr>`;
   }).join('');
 }
 
-function escH(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+// ── Sync SAP ──────────────────────────────────────────────────────────────────
+// let syncPolling = null;
 
-function toggleSidebar(){
-  document.body.classList.toggle('sidebar-collapsed');
-  document.getElementById('sidebar').classList.toggle('collapsed');
-  adjustMainPadding();
-}
-function adjustMainPadding(){
-  const fb=q('filterbar');const main=q('main');
-  if(fb&&main){requestAnimationFrame(()=>{const h=fb.getBoundingClientRect().height;main.style.paddingTop=(h+12)+'px';});}
-}
+// async function syncSAP(){
+//   const btn   = q('sync-btn');
+//   const icon  = q('sync-icon');
+//   const label = q('sync-label');
+//   const info  = q('sync-info');
+
+//   try{
+//     const res = await fetch('/api/sync', {method:'POST'});
+//     const data = await res.json();
+
+//     if(res.status === 409){
+//       toast('Sync already running...','#d97706');
+//       return;
+//     }
+
+    // Update button to loading state
+    // btn.style.background = '#d97706';
+    // btn.disabled = true;
+    // icon.classList.add('spinning');
+    // label.textContent = 'Syncing...';
+    // info.textContent = '';
+
+    // Poll status every 3 seconds
+    // syncPolling = setInterval(async () => {
+    //   try{
+    //     const s = await apiFetch('/api/sync/status');
+    //     info.textContent = `Last: ${s.last_sync||'—'}`;
+
+    //     if(!s.running){
+    //       clearInterval(syncPolling);
+    //       syncPolling = null;
+    //       icon.classList.remove('spinning');
+    //       btn.disabled = false;
+
+    //       if(s.last_status === 'Success'){
+    //         btn.style.background = '#059669';
+    //         label.textContent = 'Sync SAP';
+    //         toast(`✅ Sync done! ${s.total_rows.toLocaleString()} rows loaded as of ${s.as_of}`,'#059669');
+            // Auto refresh current page
+//             await applyFilters();
+//           } else {
+//             btn.style.background = '#dc2626';
+//             label.textContent = 'Sync Failed';
+//             toast(`❌ ${s.last_status}`,'#dc2626');
+//             setTimeout(()=>{btn.style.background='#059669';label.textContent='Sync SAP';},4000);
+//           }
+//         }
+//       }catch(e){
+//         clearInterval(syncPolling);
+//         btn.disabled=false;
+//         icon.classList.remove('spinning');
+//         label.textContent='Sync SAP';
+//         btn.style.background='#059669';
+//       }
+//     }, 3000);
+
+//   }catch(e){
+//     toast('Sync error: '+e.message,'#dc2626');
+//   }
+// }
+
+// Check sync status on load
+// async function checkSyncStatus(){
+//   try{
+//     const s = await apiFetch('/api/sync/status');
+//     if(s.last_sync) q('sync-info').textContent = `Last: ${s.last_sync}`;
+//     if(s.running){
+//       q('sync-btn').style.background='#d97706';
+//       q('sync-btn').disabled=true;
+//       q('sync-icon').classList.add('spinning');
+//       q('sync-label').textContent='Syncing...';
+//     }
+//   }catch(e){}
+// }
+
+function toggleSidebar(){document.body.classList.toggle('sidebar-collapsed');document.getElementById('sidebar').classList.toggle('collapsed');adjustMainPadding();}
+function adjustMainPadding(){const fb=q('filterbar');const main=q('main');if(fb&&main){requestAnimationFrame(()=>{const h=fb.getBoundingClientRect().height;main.style.paddingTop=(h+12)+'px';});}}
 window.addEventListener('resize',adjustMainPadding);
 document.addEventListener('keydown',e=>{if(e.key==='Enter')applyFilters();});
 init();
