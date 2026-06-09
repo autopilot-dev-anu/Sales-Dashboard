@@ -21,19 +21,19 @@ PLANT_MAP = {
 }
 
 # Will be updated dynamically after DB load
-# def get_real_salespersons():
-#     if CUSTOMER_PERSON_MAP:
-#         persons = list(set(v for v in CUSTOMER_PERSON_MAP.values() if v and v != 'Others'))
-#         return sorted(persons)
-#     return REAL_SALESPERSONS
-
 def get_real_salespersons():
-    persons = set()
-    if CUSTOMER_CODE_PERSON_MAP:
-        persons.update(v for v in CUSTOMER_CODE_PERSON_MAP.values() if v and v != 'Others')
     if CUSTOMER_PERSON_MAP:
-        persons.update(v for v in CUSTOMER_PERSON_MAP.values() if v and v != 'Others')
-    return sorted(persons) if persons else list(REGION_HEAD.values())
+        persons = list(set(v for v in CUSTOMER_PERSON_MAP.values() if v and v != 'Others'))
+        return sorted(persons)
+    return REAL_SALESPERSONS
+
+# def get_real_salespersons():
+#     persons = set()
+#     if CUSTOMER_CODE_PERSON_MAP:
+#         persons.update(v for v in CUSTOMER_CODE_PERSON_MAP.values() if v and v != 'Others')
+#     if CUSTOMER_PERSON_MAP:
+#         persons.update(v for v in CUSTOMER_PERSON_MAP.values() if v and v != 'Others')
+#     return sorted(persons) if persons else list(REGION_HEAD.values())
 
 # ── FIX 1: Region head mapping ──
 REGION_HEAD = {
@@ -338,6 +338,7 @@ def load_data():
 
     df["region"]      = df.apply(lookup_region, axis=1)
     df["salesperson"] = df.apply(lookup_person, axis=1)
+    df["salesperson"] = df["salesperson"].replace('West Customers', 'West Customer')
 
     # Quantity
     df["qty"] = (
@@ -727,8 +728,31 @@ def salesperson_detail():
         year=f.get('year')           or None,
         plant=f.get('plant')         or None
     )
-    if salesperson: df = df[df['salesperson'] == salesperson]
-    else:           df = df[df['salesperson'].isin(get_real_salespersons())]
+    # if salesperson: df = df[df['salesperson'] == salesperson]
+    
+    # if salesperson:
+    #     rw = pd.read_sql("""
+    #     SELECT DISTINCT "CODE","MARKETING PERSON"
+    #     FROM regionwise_customer
+    # """, engine)
+
+    #     codes = set(
+    #     pd.to_numeric(
+    #         rw[rw["MARKETING PERSON"] == salesperson]["CODE"],
+    #         errors="coerce"
+    #     ).dropna().astype(int)
+    # )
+
+    #     df = df[df["cust_code"].isin(codes)]
+    # else:           df = df[df['salesperson'].isin(get_real_salespersons())]
+    
+    if salesperson:
+        # Normalize West Customers → West Customer
+        sp_normalized = 'West Customer' if salesperson.lower() in ('west customer', 'west customers') else salesperson
+        df = df[df['salesperson'] == sp_normalized]
+    else:
+        df = df[df['salesperson'].isin(get_real_salespersons())]
+    
 
     df["is_overdue"] = df["due_date"] < TODAY
 
